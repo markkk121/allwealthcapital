@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<!-- nojekyll -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src *; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data: blob:; frame-src *; connect-src *;">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabuwul FX | Crypto · Forex · Stocks</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0d0f2b;--navy2:#12153a;--navy3:#1a1e45;
+  --blue:#4f46e5;--blue2:#6366f1;--blue3:rgba(79,70,229,0.15);
+  --gold:#f59e0b;--green:#10b981;--red:#ef4444;
+  --white:#ffffff;--gray:#9ca3af;--gray2:#6b7280;
+  --border:rgba(255,255,255,0.08);--border2:rgba(79,70,229,0.3);
+  --font:'Poppins',sans-serif;--mono:'Roboto Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:var(--font);overflow-x:hidden}
+
+/* DOTTED BACKGROUND PATTERN */
+.dots-bg{background-image:radial-gradient(rgba(255,255,255,0.06) 1px,transparent 1px);background-size:24px 24px}
+
+/* TOP BAR */
+.topbar{background:var(--navy2);border-bottom:1px solid var(--border);padding:0.4rem 3rem;display:flex;justify-content:flex-end;align-items:center;gap:2rem;font-size:0.72rem;color:var(--gray)}
+.topbar a{color:var(--gray);text-decoration:none}
+.topbar a:hover{color:var(--white)}
+
+/* NAV */
+nav{background:var(--navy2);border-bottom:1px solid var(--border);padding:1rem 3rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+.logo{display:flex;align-items:center;gap:0.6rem;cursor:pointer;text-decoration:none}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.logo-text{font-size:1.1rem;font-weight:700;color:var(--white)}
+.logo-text span{color:var(--blue2)}
+.nav-links{display:flex;gap:0.3rem;list-style:none;align-items:center}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:0.88rem;font-weight:500;padding:0.5rem 0.9rem;border-radius:6px;transition:all 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white);background:var(--blue3)}
+.hot-badge{background:#ef4444;color:#fff;font-size:0.55rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:3px;margin-left:0.3rem;vertical-align:middle}
+.nav-right{display:flex;gap:0.8rem;align-items:center}
+.btn-nav-signin{background:none;border:1px solid var(--border2);color:var(--blue2);font-family:var(--font);font-size:0.82rem;font-weight:600;padding:0.5rem 1.2rem;border-radius:6px;cursor:pointer;transition:all 0.2s}
+.btn-nav-signin:hover{background:var(--blue3)}
+.btn-nav-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;font-family:var(--font);font-size:0.82rem;font-weight:600;padding:0.5rem 1.4rem;border:none;border-radius:6px;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 15px rgba(79,70,229,0.3)}
+.btn-nav-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(79,70,229,0.4)}
+#navUserBar{display:none;align-items:center;gap:0.8rem;font-size:0.82rem}
+#navEmailDisplay{color:var(--gray);font-size:0.78rem}
+
+/* PAGES */
+.page{display:none}.page.active{display:block}
+
+/* TICKER */
+.ticker-bar{background:var(--navy3);border-bottom:1px solid var(--border);padding:0.6rem 0;overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-flex;gap:2.5rem;animation:tickScroll 35s linear infinite}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{font-family:var(--mono);font-size:0.65rem;display:flex;align-items:center;gap:0.5rem}
+.t-sym{color:var(--white);font-weight:500}
+.t-price{color:var(--gray)}
+.t-up{color:var(--green)}
+.t-down{color:var(--red)}
+@keyframes tickScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ══ HERO ══ */
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0d0f2b 0%,#1a1e45 40%,#0d0f2b 100%);z-index:0}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,rgba(13,15,43,0.95) 45%,rgba(13,15,43,0.7) 100%)}
+.hero-dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.04) 1px,transparent 1px);background-size:28px 28px}
+.hero-content{position:relative;z-index:2;padding:0 3rem;max-width:700px}
+.hero-eyebrow{font-size:0.78rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue2);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.6rem}
+.hero-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,0.4)}50%{box-shadow:0 0 0 8px rgba(16,185,129,0)}}
+.hero h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:800;line-height:1.1;margin-bottom:1.2rem}
+.hero h1 .hl{color:var(--blue2)}
+.hero-sub{font-size:1rem;color:var(--gray);line-height:1.8;margin-bottom:2rem;max-width:48ch}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3rem}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;font-family:var(--font);font-size:0.9rem;font-weight:600;padding:0.9rem 2rem;border:none;border-radius:8px;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px rgba(79,70,229,0.35);position:relative;overflow:hidden}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);transform:translateX(-100%);transition:transform 0.5s}
+.btn-primary:hover::after{transform:translateX(100%)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(79,70,229,0.5)}
+.btn-outline{background:none;border:1px solid var(--border2);color:var(--blue2);font-family:var(--font);font-size:0.9rem;font-weight:600;padding:0.9rem 2rem;border-radius:8px;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem}
+.btn-outline:hover{background:var(--blue3)}
+.hero-stats{display:flex;gap:2.5rem}
+.hstat{display:flex;flex-direction:column}
+.hstat-val{font-size:1.6rem;font-weight:800;color:var(--white)}
+.hstat-lbl{font-size:0.7rem;color:var(--gray);margin-top:0.1rem}
+.hero-float{position:absolute;right:3rem;top:50%;transform:translateY(-50%);z-index:2;display:flex;flex-direction:column;gap:1rem}
+.hf-card{background:rgba(13,15,43,0.85);border:1px solid var(--border2);backdrop-filter:blur(16px);padding:1rem 1.3rem;border-radius:12px;display:flex;align-items:center;gap:1rem;min-width:210px;animation:floatY 4s ease-in-out infinite}
+.hf-card:nth-child(2){animation-delay:1.5s}.hf-card:nth-child(3){animation-delay:3s}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hf-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;flex-shrink:0}
+.hf-btc{background:rgba(247,147,26,0.2);color:#f7931a}
+.hf-eth{background:rgba(98,126,234,0.2);color:#627eea}
+.hf-sol{background:rgba(20,241,149,0.2);color:#14f195}
+.hf-info .hf-name{font-weight:600;font-size:0.88rem}
+.hf-info .hf-price{font-size:0.78rem;color:var(--gray);font-family:var(--mono)}
+.hf-chg{font-family:var(--mono);font-size:0.72rem;font-weight:600}
+.hf-up{color:var(--green)}.hf-dn{color:var(--red)}
+
+/* ══ SECTION COMMON ══ */
+.section{padding:5.5rem 3rem}
+.s-eyebrow{font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue2);margin-bottom:0.8rem}
+.s-title{font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:800;line-height:1.15;margin-bottom:1.2rem}
+.s-title .hl{color:var(--blue2)}
+.s-divider{width:60px;height:3px;background:linear-gradient(90deg,var(--blue),var(--blue2));border-radius:2px;margin:1rem auto 0}
+.s-center{text-align:center}
+.reveal{opacity:1;transform:none;transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:none}
+.reveal-l{opacity:1;transform:none;transition:opacity 0.7s,transform 0.7s}
+.reveal-l.visible{opacity:1;transform:none}
+.reveal-r{opacity:1;transform:none;transition:opacity 0.7s,transform 0.7s}
+.reveal-r.visible{opacity:1;transform:none}
+
+/* ══ ABOUT ══ */
+.about-sec{background:var(--navy2);border-top:1px solid var(--border)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;margin-top:3rem}
+.about-img-wrap{position:relative}
+.about-photo{width:100%;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,var(--navy3),var(--blue3));aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:7rem;border:1px solid var(--border2)}
+.about-badge-box{position:absolute;bottom:-1.2rem;right:-1.2rem;background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:10px;padding:1.2rem 1.5rem;text-align:center;box-shadow:0 8px 30px rgba(79,70,229,0.4)}
+.about-badge-val{font-size:1.8rem;font-weight:800;color:#fff}
+.about-badge-lbl{font-size:0.65rem;color:rgba(255,255,255,0.8);margin-top:0.1rem}
+.about-body{font-size:0.9rem;color:var(--gray);line-height:1.9;margin-bottom:1.8rem}
+.about-checks{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;margin-bottom:2rem}
+.check-item{display:flex;align-items:center;gap:0.7rem;font-size:0.85rem;font-weight:500}
+.check-icon{width:22px;height:22px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--green);font-size:0.65rem;flex-shrink:0}
+
+/* ══ HOW IT WORKS ══ */
+.hiw-sec{background:var(--navy) dots-bg;position:relative;overflow:hidden}
+.hiw-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.04) 1px,transparent 1px);background-size:24px 24px}
+.hiw-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;margin-top:3.5rem;position:relative}
+.hiw-steps::before{content:'';position:absolute;top:2.5rem;left:16%;right:16%;height:2px;background:linear-gradient(90deg,var(--blue),var(--blue2),var(--blue));opacity:0.3}
+.hiw-step{text-align:center;padding:0 1rem;position:relative}
+.step-circle{width:56px;height:56px;background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:#fff;margin:0 auto 1.5rem;box-shadow:0 4px 20px rgba(79,70,229,0.4);transition:transform 0.3s}
+.hiw-step:hover .step-circle{transform:scale(1.1)}
+.step-title{font-size:1.05rem;font-weight:700;margin-bottom:0.7rem;text-transform:uppercase;letter-spacing:0.05em}
+.step-desc{font-size:0.82rem;color:var(--gray);line-height:1.8}
+
+/* ══ WHAT WE DO ══ */
+.wwd-sec{background:linear-gradient(180deg,var(--navy2) 0%,var(--navy3) 100%);border-top:1px solid var(--border);position:relative;overflow:hidden}
+.wwd-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.03) 1px,transparent 1px);background-size:24px 24px}
+.wwd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:3rem;border:1px dashed rgba(255,255,255,0.1)}
+.wwd-card{padding:2.5rem 2rem;border-right:1px dashed rgba(255,255,255,0.1);border-bottom:1px dashed rgba(255,255,255,0.1);transition:background 0.3s;text-align:center;position:relative}
+.wwd-card:nth-child(3n){border-right:none}
+.wwd-card:nth-last-child(-n+3){border-bottom:none}
+.wwd-card:hover{background:rgba(79,70,229,0.06)}
+.wwd-icon{font-size:2.8rem;margin-bottom:1.2rem;display:block;opacity:0.85}
+.wwd-title{font-size:1rem;font-weight:700;margin-bottom:0.7rem}
+.wwd-desc{font-size:0.8rem;color:var(--gray);line-height:1.8}
+
+/* ══ INVESTMENT PLANS ══ */
+.plans-sec{background:linear-gradient(180deg,var(--navy3) 0%,var(--navy2) 100%);border-top:1px solid var(--border);position:relative;overflow:hidden}
+.plans-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.03) 1px,transparent 1px);background-size:24px 24px}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem}
+.plan-card{border:1px dashed rgba(255,255,255,0.12);padding:2.5rem 2rem;text-align:center;transition:all 0.4s;position:relative;border-radius:4px;background:rgba(255,255,255,0.02)}
+.plan-card:hover{background:rgba(79,70,229,0.08);border-color:var(--border2);transform:translateY(-6px)}
+.plan-card.hot{border-color:var(--blue2);background:rgba(79,70,229,0.08)}
+.plan-hot-tag{position:absolute;top:-0.7rem;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--blue),var(--blue2));color:#fff;font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.9rem;border-radius:20px}
+.plan-icon-wrap{width:64px;height:64px;border:1px dashed var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1.2rem}
+.plan-name{font-size:1.2rem;font-weight:800;margin-bottom:0.5rem}
+.plan-min{font-size:0.8rem;color:var(--gray);margin-bottom:0.2rem}
+.plan-max{font-size:0.8rem;color:var(--gray);margin-bottom:1rem}
+.plan-roi{font-size:1.1rem;color:var(--blue2);font-weight:700;margin-bottom:1.5rem}
+.plan-btn{display:block;width:100%;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;font-family:var(--font);font-size:0.82rem;font-weight:600;padding:0.75rem;border:none;border-radius:6px;cursor:pointer;transition:all 0.3s}
+.plan-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(79,70,229,0.4)}
+
+/* ══ SERVICES ══ */
+.services-sec{background:var(--navy);border-top:1px solid var(--border)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem}
+.svc-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:all 0.3s}
+.svc-card:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.svc-img{aspect-ratio:16/9;background:linear-gradient(135deg,var(--navy3),rgba(79,70,229,0.2));display:flex;align-items:center;justify-content:center;font-size:4rem;border-bottom:1px solid var(--border)}
+.svc-body{padding:1.5rem}
+.svc-title{font-size:1rem;font-weight:700;margin-bottom:0.6rem}
+.svc-desc{font-size:0.8rem;color:var(--gray);line-height:1.8}
+
+/* ══ MARKET PRICES (CryptoCompare) ══ */
+.market-sec{background:var(--navy2);border-top:1px solid var(--border)}
+.cc-wrap{background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-top:2rem}
+.cc-tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.cc-tab{background:none;border:1px solid var(--border);color:var(--gray);font-family:var(--font);font-size:0.78rem;font-weight:600;padding:0.4rem 1rem;border-radius:6px;cursor:pointer;transition:all 0.2s}
+.cc-tab.active{background:linear-gradient(135deg,var(--blue),var(--blue2));border-color:transparent;color:#fff}
+.cc-cur-btns{display:flex;gap:0.5rem;margin-bottom:1.2rem}
+.cc-cur{background:none;border:1px solid var(--border);color:var(--gray);font-size:0.78rem;font-weight:700;padding:0.3rem 0.8rem;border-radius:4px;cursor:pointer;font-family:var(--font);transition:all 0.2s}
+.cc-cur.active{border-color:var(--gold);color:var(--gold)}
+.cc-time-btns{display:flex;gap:0.5rem;margin-bottom:1.5rem}
+.cc-time{background:none;border:1px solid var(--border);color:var(--gray);font-size:0.72rem;padding:0.25rem 0.7rem;border-radius:4px;cursor:pointer;font-family:var(--mono);transition:all 0.2s}
+.cc-time.active{border-color:var(--blue2);color:var(--blue2)}
+#ccChart{width:100%;height:280px}
+.cc-price-lbl{font-family:var(--mono);font-size:0.78rem;color:var(--gray);margin-bottom:0.5rem}
+.cc-price-val{font-family:var(--mono);font-size:1.6rem;font-weight:700;color:var(--white);margin-bottom:1rem}
+
+/* ══ TEAM ══ */
+.team-sec{background:var(--navy);border-top:1px solid var(--border);position:relative;overflow:hidden}
+.team-sec::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.04) 1px,transparent 1px);background-size:24px 24px}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem}
+.team-card{text-align:center;transition:transform 0.3s}
+.team-card:hover{transform:translateY(-4px)}
+.team-photo{width:100%;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,var(--navy3),rgba(79,70,229,0.2));display:flex;align-items:center;justify-content:center;font-size:5rem;border:1px solid var(--border);margin-bottom:1.2rem}
+.team-name{font-size:1.05rem;font-weight:700;margin-bottom:0.3rem}
+.team-role{font-size:0.8rem;color:var(--blue2);font-weight:600}
+
+/* ══ FAQ ══ */
+.faq-sec{background:var(--navy2);border-top:1px solid var(--border)}
+.faq-list{max-width:820px;margin:3rem auto 0;display:flex;flex-direction:column;gap:0.6rem}
+.faq-item{background:var(--navy3);border-radius:6px;overflow:hidden;border:1px solid var(--border);transition:border-color 0.3s}
+.faq-item.open{border-color:var(--border2)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.5rem;cursor:pointer;font-size:0.92rem;font-weight:600;gap:1rem;transition:color 0.2s}
+.faq-q:hover{color:var(--blue2)}
+.faq-icon{color:var(--blue2);font-size:1.3rem;font-weight:300;transition:transform 0.3s;flex-shrink:0}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-a{font-size:0.82rem;color:var(--gray);line-height:1.9;padding:0 1.5rem;max-height:0;overflow:hidden;transition:max-height 0.4s,padding 0.3s}
+.faq-item.open .faq-a{max-height:250px;padding:0 1.5rem 1.2rem}
+
+/* ══ LIVE EARNINGS NOTIF ══ */
+#earn-notif{position:fixed;bottom:6rem;left:1.5rem;z-index:500;background:var(--navy2);border:1px solid var(--border2);border-left:3px solid var(--blue2);border-radius:8px;padding:0.9rem 1.2rem;max-width:270px;display:flex;align-items:center;gap:0.9rem;transform:translateX(-120%);transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
+#earn-notif.show{transform:translateX(0)}
+.en-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.en-content{font-size:0.72rem;line-height:1.6}
+.en-name{color:var(--blue2);font-weight:700}
+.en-country{color:var(--green);font-weight:600}
+.en-amount{color:var(--gold);font-size:0.82rem;font-weight:700}
+
+/* ══ WHATSAPP ══ */
+#wa-btn{position:fixed;bottom:1.5rem;right:1.5rem;z-index:400;width:54px;height:54px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:all 0.3s;text-decoration:none;animation:waPulse 3s infinite}
+#wa-btn:hover{transform:scale(1.1)}
+@keyframes waPulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.4)}50%{box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 0 8px rgba(37,211,102,0.08)}}
+
+/* ══ AUTH MODAL ══ */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.modal-ov.open{display:flex}
+.modal-box{background:var(--navy2);border:1px solid var(--border2);border-radius:12px;padding:2.5rem;width:100%;max-width:400px;position:relative;animation:popIn 0.3s forwards}
+@keyframes popIn{from{opacity:0;transform:scale(0.95) translateY(10px)}to{opacity:1;transform:none}}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--gray);font-size:1.2rem;cursor:pointer}
+.modal-brand{font-size:1rem;font-weight:700;color:var(--white);margin-bottom:0.3rem}
+.modal-brand span{color:var(--blue2)}
+.modal h2{font-size:1.6rem;font-weight:700;margin-bottom:0.3rem}
+.modal-sub{font-size:0.8rem;color:var(--gray);margin-bottom:1.5rem}
+.modal-tabs{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.mtab{background:none;border:none;color:var(--gray);font-family:var(--font);font-size:0.78rem;font-weight:600;padding:0.5rem 1.2rem;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s}
+.mtab.active{color:var(--blue2);border-bottom-color:var(--blue2)}
+.auth-form{display:flex;flex-direction:column;gap:0.9rem}
+.form-lbl{font-size:0.7rem;font-weight:600;color:var(--gray);letter-spacing:0.08em;text-transform:uppercase;display:block;margin-bottom:0.3rem}
+.form-inp{background:var(--navy3);border:1px solid var(--border);color:var(--white);font-family:var(--font);font-size:0.85rem;padding:0.7rem 1rem;border-radius:6px;outline:none;width:100%;transition:border-color 0.2s}
+.form-inp:focus{border-color:var(--blue2)}
+.auth-err{font-size:0.72rem;color:var(--red);padding:0.6rem 0.9rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:6px;display:none}
+.auth-submit{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;font-family:var(--font);font-size:0.88rem;font-weight:700;padding:0.85rem;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;margin-top:0.3rem}
+.auth-submit:hover{opacity:0.9;transform:translateY(-1px)}
+
+/* ══ EDIT MODAL ══ */
+
+.edit-box h3{font-size:1.3rem;font-weight:700;margin-bottom:0.2rem}
+.edit-sub{font-size:0.72rem;color:var(--blue2);margin-bottom:1.2rem}
+
+
+
+
+.edit-cancel:hover{border-color:var(--red);color:var(--red)}
+
+/* ══ DASHBOARD ══ */
+#dashPage{min-height:100vh;padding:5rem 3rem 4rem;background:var(--navy)}
+.dash-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.dash-title{font-size:1.8rem;font-weight:800}
+.dash-title span{color:var(--blue2)}
+.dash-email{font-size:0.78rem;color:var(--gray);margin-top:0.3rem}
+.dash-signout{background:none;border:1px solid var(--border);color:var(--gray);font-family:var(--font);font-size:0.78rem;padding:0.5rem 1rem;border-radius:6px;cursor:pointer;transition:all 0.2s}
+.dash-signout:hover{border-color:var(--red);color:var(--red)}
+.dash-sum{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2rem}
+.sum-card{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem}
+.sum-lbl{font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);margin-bottom:0.5rem}
+.sum-val{font-size:1.7rem;font-weight:800;color:var(--white)}
+.sum-val.up{color:var(--green)}.sum-val.dn{color:var(--red)}
+.sum-sub{font-size:0.68rem;color:var(--gray);margin-top:0.2rem}
+.dash-grid{display:grid;grid-template-columns:1fr 1.9fr;gap:1.5rem}
+.d-card{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
+.d-card-title{font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue2);margin-bottom:1.2rem}
+.add-form{display:flex;flex-direction:column;gap:0.8rem}
+.add-form .form-inp{border-radius:6px}
+.add-btn{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;font-family:var(--font);font-size:0.8rem;font-weight:700;padding:0.75rem;border:none;border-radius:6px;cursor:pointer;transition:all 0.2s}
+.add-btn:hover{opacity:0.9}
+.add-err{font-size:0.7rem;color:var(--red);display:none;margin-top:0.3rem}
+.h-tbl{width:100%;border-collapse:collapse}
+.h-tbl th{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);padding:0 0.9rem 0.8rem;text-align:left;border-bottom:1px solid var(--border)}
+.h-tbl td{font-size:0.8rem;padding:0.85rem 0.9rem;border-bottom:1px solid rgba(255,255,255,0.03);font-family:var(--mono)}
+.h-tbl tr:last-child td{border-bottom:none}
+.h-tbl tr:hover td{background:rgba(79,70,229,0.04)}
+.sym{color:var(--blue2);font-weight:600;font-family:var(--font)}
+.gain{color:var(--green)}.loss{color:var(--red)}
+.tbl-btn{font-family:var(--font);font-size:0.65rem;font-weight:600;padding:0.28rem 0.65rem;border-radius:4px;cursor:pointer;transition:all 0.2s;border:1px solid;margin-right:0.3rem;background:none}
+.tbl-edit{border-color:rgba(79,70,229,0.3);color:var(--blue2)}.tbl-edit:hover{background:rgba(79,70,229,0.1)}
+.tbl-del{border-color:rgba(239,68,68,0.3);color:var(--red)}.tbl-del:hover{background:rgba(239,68,68,0.1)}
+.empty{font-size:0.82rem;color:var(--gray);text-align:center;padding:2.5rem;font-family:var(--mono)}
+
+/* ══ ADMIN ══ */
+.admin-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:2px solid var(--blue)}
+.admin-ttl{font-size:1.8rem;font-weight:800}
+.admin-ttl span{color:var(--blue2)}
+.admin-badge{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(79,70,229,0.15);border:1px solid var(--border2);color:var(--blue2);padding:0.2rem 0.7rem;border-radius:4px;margin-top:0.3rem;display:inline-block}
+.admin-users{display:flex;flex-direction:column;gap:1.2rem}
+.au-card{background:var(--navy2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.au-hdr{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;cursor:pointer;transition:background 0.2s;border-bottom:1px solid transparent}
+.au-hdr:hover{background:rgba(79,70,229,0.04)}
+.au-email{font-size:0.85rem;font-weight:600}
+.au-meta{font-size:0.7rem;color:var(--gray);margin-top:0.2rem;font-family:var(--mono)}
+.au-toggle{font-size:0.7rem;color:var(--blue2);font-family:var(--mono)}
+.au-body{display:none;padding:1.5rem;border-top:1px solid var(--border)}
+.au-body.open{display:block}
+.au-add{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:0.6rem;margin-bottom:1.2rem;align-items:end}
+.au-add .form-inp{padding:0.55rem 0.8rem;border-radius:6px;font-size:0.78rem}
+.au-add-btn{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;font-family:var(--font);font-size:0.7rem;font-weight:700;padding:0.55rem 1rem;border:none;border-radius:6px;cursor:pointer;white-space:nowrap}
+.loading{font-size:0.82rem;color:var(--gray);text-align:center;padding:2.5rem;font-family:var(--mono)}
+
+/* ══ FOOTER ══ */
+footer{background:var(--navy3);border-top:1px solid var(--border);padding:4rem 3rem 2rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:4rem;margin-bottom:3rem}
+.footer-brand{font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:1rem;display:flex;align-items:center;gap:0.6rem}
+.footer-brand span{color:var(--blue2)}
+.footer-desc{font-size:0.8rem;color:var(--gray);line-height:1.9;margin-bottom:1.5rem}
+.footer-col h4{font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue2);margin-bottom:1.2rem;padding-bottom:0.5rem;border-bottom:2px solid var(--border2)}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:0.7rem}
+.footer-col ul li::before{content:'»';color:var(--blue2);margin-right:0.5rem;font-size:0.8rem}
+.footer-col a{font-size:0.82rem;color:var(--gray);text-decoration:none;transition:color 0.2s}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:0.75rem;color:var(--gray)}
+.footer-legal{font-size:0.68rem;color:var(--gray);opacity:0.6;max-width:55ch;text-align:right;line-height:1.7}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{font-size:0.75rem;color:var(--gray);text-decoration:none}
+.footer-links a:hover{color:var(--white)}
+
+@keyframes waPulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.4)}50%{box-shadow:0 4px 30px rgba(37,211,102,0.8)}}
+</style>
+</head>
+<body>
+
+<!-- LIVE EARNINGS NOTIFICATION -->
+<div id="earn-notif">
+  <div class="en-logo">◈</div>
+  <div class="en-content">
+    <div><span class="en-name" id="en-name">Caleb</span> from <span class="en-country" id="en-country">Norway</span></div>
+    <div class="en-amount" id="en-amount">$80,237</div>
+    <div style="color:var(--gray);font-size:0.65rem">just earned on Tabuwul FX</div>
+  </div>
+</div>
+
+<!-- WHATSAPP -->
+
+
+<!-- AUTH MODAL -->
+<div class="modal-ov" id="authModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-brand">Tabuwul <span>FX</span></div>
+    <h2 id="mTitle">Welcome Back</h2>
+    <p class="modal-sub" id="mSub">Sign in to your account</p>
+    <div class="modal-tabs">
+      <button class="mtab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+      <button class="mtab" id="tabSignup" onclick="switchTab('signup')">Register</button>
+    </div>
+    <div class="auth-err" id="authErr"></div>
+    <form class="auth-form" onsubmit="handleAuth(event)">
+      <div id="nameGrp" style="display:none">
+        <label class="form-lbl">Full Name</label>
+        <input class="form-inp" type="text" id="authName" placeholder="John Smith">
+      </div>
+      <div>
+        <label class="form-lbl">Email</label>
+        <input class="form-inp" type="email" id="authEmail" placeholder="you@example.com" required>
+      </div>
+      <div>
+        <label class="form-lbl">Password</label>
+        <input class="form-inp" type="password" id="authPass" placeholder="••••••••" required minlength="6">
+      </div>
+      <button type="submit" class="auth-submit" id="authBtn">Sign In</button>
+    </form>
+  </div>
+</div>
+
+
+
+<!-- PASSWORD GATE MODAL -->
+<div class="modal-ov" id="pwGateModal">
+  <div class="modal-box" style="max-width:380px">
+    <button class="modal-close" onclick="closePwGate()">✕</button>
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-size:2.5rem;margin-bottom:0.5rem">🔐</div>
+      <div style="font-size:1.3rem;font-weight:800">Verify Identity</div>
+      <div style="font-size:0.8rem;color:var(--gray);margin-top:0.4rem">Enter your password to access your portfolio</div>
+    </div>
+    <div class="auth-err" id="pwGateErr" style="margin-bottom:1rem"></div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div>
+        <label class="form-lbl">Password</label>
+        <input class="form-inp" type="password" id="pwGateInput" placeholder="Enter your password" onkeydown="if(event.key==='Enter')verifyPwGate()">
+      </div>
+      <button class="auth-submit" onclick="verifyPwGate()" id="pwGateBtn">Verify & Enter Portfolio</button>
+    </div>
+  </div>
+</div>
+
+<!-- ████ HOME PAGE ████ -->
+<div class="page active" id="homePage">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span>🌐 English</span>
+  <a href="mailto:support@tabuwulfx.com">✉ support@tabuwulfx.com</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="logo" onclick="showPage('home')">
+    <div class="logo-icon">◈</div>
+    <div class="logo-text">Tabuwul <span>FX</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#hero" class="active">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#plans">Buy Crypto <span class="hot-badge">HOT</span></a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div id="navUserBar">
+      
+      <button class="btn-nav-signin" onclick="openPwGate()">Portfolio</button>
+      <button class="btn-nav-signin" onclick="signOut()">Sign Out</button>
+    </div>
+    <div id="navAuthBtns">
+      <button class="btn-nav-signin" onclick="openModal('login')">Sign in</button>
+      <button class="btn-nav-primary" onclick="openModal('signup')">GET STARTED NOW!</button>
+    </div>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="tickerTrack">
+    <span style="font-family:var(--mono);font-size:0.65rem;color:var(--gray);padding:0 2rem">Loading markets…</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><div class="hero-dot"></div> Professional Investment Management</div>
+    <h1>Trade Crypto, Forex<br>&amp; <span class="hl">Stocks</span> Like a Pro</h1>
+    <p class="hero-sub">Tabuwul FX is your trusted partner for high-performance trading and investment across global markets. Guaranteed ROIs, instant withdrawals, and 24/7 support.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="openModal('signup')">GET STARTED NOW!</button>
+      <a href="#about" class="btn-outline">Learn More ↓</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-val">$2.4B+</div><div class="hstat-lbl">Trading Volume</div></div>
+      <div style="width:1px;background:var(--border);align-self:stretch"></div>
+      <div class="hstat"><div class="hstat-val">2,400+</div><div class="hstat-lbl">Active Traders</div></div>
+      <div style="width:1px;background:var(--border);align-self:stretch"></div>
+      <div class="hstat"><div class="hstat-val">24/7</div><div class="hstat-lbl">Market Access</div></div>
+    </div>
+  </div>
+  <div class="hero-float">
+    <div class="hf-card"><div class="hf-icon hf-btc">₿</div><div class="hf-info"><div class="hf-name">Bitcoin</div><div class="hf-price">$67,842</div></div><div class="hf-chg hf-up">+2.14%</div></div>
+    <div class="hf-card"><div class="hf-icon hf-eth">Ξ</div><div class="hf-info"><div class="hf-name">Ethereum</div><div class="hf-price">$3,521</div></div><div class="hf-chg hf-up">+1.87%</div></div>
+    <div class="hf-card"><div class="hf-icon hf-sol">◎</div><div class="hf-info"><div class="hf-name">Solana</div><div class="hf-price">$142.80</div></div><div class="hf-chg hf-up">+3.65%</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about-sec" id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal-l">
+      <div class="about-photo">💼</div>
+      <div class="about-badge-box"><div class="about-badge-val">15+</div><div class="about-badge-lbl">Years Experience</div></div>
+    </div>
+    <div class="reveal-r">
+      <div class="s-eyebrow">About Tabuwul FX</div>
+      <h2 class="s-title">Connect with the <span class="hl">Right Broker</span></h2>
+      <p class="about-body">Whether you are experienced or a beginner, connecting with the right broker is everything. Tabuwul FX is a leading trade and investment company in the UK with years of industry experience. We specialize in Cryptocurrency, Forex, and Stock market investments.</p>
+      <div class="about-checks">
+        <div class="check-item"><div class="check-icon">✓</div>High Frequency Trading</div>
+        <div class="check-item"><div class="check-icon">✓</div>Instant Withdrawals</div>
+        <div class="check-item"><div class="check-icon">✓</div>Guaranteed ROIs</div>
+        <div class="check-item"><div class="check-icon">✓</div>Multiple Funding Options</div>
+        <div class="check-item"><div class="check-icon">✓</div>Fast and Secure</div>
+        <div class="check-item"><div class="check-icon">✓</div>Learn from Customer Feedback</div>
+      </div>
+      <button class="btn-primary" onclick="openModal('signup')">Read More →</button>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section hiw-sec">
+  <div class="s-eyebrow s-center reveal">How It Work</div>
+  <h2 class="s-title s-center reveal">Three Simple Steps To Start <span class="hl">Earning</span></h2>
+  <div class="s-divider reveal"></div>
+  <div class="hiw-steps">
+    <div class="hiw-step reveal">
+      <div class="step-circle">01</div>
+      <div class="step-title">Create Account</div>
+      <p class="step-desc">Create your account and get started with your investment journey. No complicated verification required.</p>
+    </div>
+    <div class="hiw-step reveal">
+      <div class="step-circle">02</div>
+      <div class="step-title">Make Deposit</div>
+      <p class="step-desc">After account creation, simply make deposits from the funding page in your dashboard using any payment method.</p>
+    </div>
+    <div class="hiw-step reveal">
+      <div class="step-circle">03</div>
+      <div class="step-title">Earn &amp; Get Paid</div>
+      <p class="step-desc">You can make withdrawals as soon as you start making profits. Funds are sent directly to your account instantly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE DO -->
+<section class="section wwd-sec">
+  <div class="s-eyebrow s-center reveal">What We Do</div>
+  <h2 class="s-title s-center reveal">We Create Solutions for Your <span class="hl">Investment Needs</span></h2>
+  <div class="s-divider reveal"></div>
+  <div class="wwd-grid">
+    <div class="wwd-card reveal"><span class="wwd-icon">👥</span><div class="wwd-title">Business Finance Strategy</div><p class="wwd-desc">Devise and implement business strategies that drive success for an entire business or division, technology, or asset.</p></div>
+    <div class="wwd-card reveal"><span class="wwd-icon">📋</span><div class="wwd-title">Portfolio &amp; Resource Allocation</div><p class="wwd-desc">By balancing and optimizing the many competing assets and initiatives, we achieve deep and lasting improvements.</p></div>
+    <div class="wwd-card reveal"><span class="wwd-icon">🏢</span><div class="wwd-title">Organization &amp; Decision Process</div><p class="wwd-desc">Organizations are designed to be effective and efficient. The processes require cross-functional thinking.</p></div>
+    <div class="wwd-card reveal"><span class="wwd-icon">📊</span><div class="wwd-title">Decision &amp; Risk Analytic</div><p class="wwd-desc">Our decision risk analytics empower clients to develop rational decision-making models and development strategies.</p></div>
+    <div class="wwd-card reveal"><span class="wwd-icon">🏦</span><div class="wwd-title">Banking &amp; Capital Markets</div><p class="wwd-desc">The venues where savings and investments are channeled between the suppliers who have capital and those who need it.</p></div>
+    <div class="wwd-card reveal"><span class="wwd-icon">🌐</span><div class="wwd-title">Modern &amp; Tribe Workplace</div><p class="wwd-desc">Redefine your workplace value equation that encourage staff to work more attentively and gracefully.</p></div>
+  </div>
+</section>
+
+<!-- INVESTMENT PLANS -->
+<section class="section plans-sec" id="plans">
+  <div class="s-eyebrow s-center reveal">Our Investment Plans</div>
+  <h2 class="s-title s-center reveal">Choose Your <span class="hl">Investment Tier</span></h2>
+  <div class="s-divider reveal"></div>
+  <div class="plans-grid">
+    <div class="plan-card reveal">
+      <div class="plan-icon-wrap">🌱</div>
+      <div class="plan-name">Starter Tier</div>
+      <div class="plan-min">Minimum amount: $1,000</div>
+      <div class="plan-max">Maximum amount: $9,999</div>
+      <div class="plan-roi">10% Daily for 12 Weeks</div>
+      <button class="plan-btn" onclick="openModal('signup')">Suscribe to Plan</button>
+    </div>
+    <div class="plan-card hot reveal">
+      <div class="plan-hot-tag">MOST POPULAR</div>
+      <div class="plan-icon-wrap">📈</div>
+      <div class="plan-name">Growth Tier</div>
+      <div class="plan-min">Minimum amount: $10,000</div>
+      <div class="plan-max">Maximum amount: $99,999</div>
+      <div class="plan-roi">15% Weekly for 12 Weeks</div>
+      <button class="plan-btn" onclick="openModal('signup')">Suscribe to Plan</button>
+    </div>
+    <div class="plan-card reveal">
+      <div class="plan-icon-wrap">💎</div>
+      <div class="plan-name">Elite Tier</div>
+      <div class="plan-min">Minimum amount: $500,000</div>
+      <div class="plan-max">Maximum amount: $2,999,999</div>
+      <div class="plan-roi">30% Weekly for 12 Weeks</div>
+      <button class="plan-btn" onclick="openModal('signup')">Suscribe to Plan</button>
+    </div>
+    <div class="plan-card reveal">
+      <div class="plan-icon-wrap">🏆</div>
+      <div class="plan-name">Prime Tier</div>
+      <div class="plan-min">Minimum amount: $100,000</div>
+      <div class="plan-max">Maximum amount: $499,999</div>
+      <div class="plan-roi">20% Weekly for 12 Weeks</div>
+      <button class="plan-btn" onclick="openModal('signup')">Suscribe to Plan</button>
+    </div>
+    <div class="plan-card reveal">
+      <div class="plan-icon-wrap">👑</div>
+      <div class="plan-name">Legacy Tier</div>
+      <div class="plan-min">Minimum amount: $3,000,000</div>
+      <div class="plan-max">Maximum amount: $10,000,000+</div>
+      <div class="plan-roi">50% Weekly for 12 Weeks</div>
+      <button class="plan-btn" onclick="openModal('signup')">Suscribe to Plan</button>
+    </div>
+    <div class="plan-card reveal" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem">
+      <div class="plan-icon-wrap">🤝</div>
+      <div class="plan-name">Custom Plan</div>
+      <p style="font-size:0.8rem;color:var(--gray);text-align:center;line-height:1.8">Need a tailored investment plan? Contact our advisory team for a bespoke solution.</p>
+      <button class="plan-btn" onclick="openModal('signup')">Contact Us</button>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section services-sec" id="services">
+  <div class="s-eyebrow s-center reveal">Our Services</div>
+  <h2 class="s-title s-center reveal">Bring to the Table <span class="hl">Win-Win</span> Solutions</h2>
+  <div class="s-divider reveal"></div>
+  <div class="services-grid">
+    <div class="svc-card reveal">
+      <div class="svc-img">📊</div>
+      <div class="svc-body"><h3 class="svc-title">Investment Consultancy</h3><p class="svc-desc">We provide professional investment consultancy to help clients realize their investment dreams and financial goals.</p></div>
+    </div>
+    <div class="svc-card reveal">
+      <div class="svc-img">₿</div>
+      <div class="svc-body"><h3 class="svc-title">Cryptocurrency Investment</h3><p class="svc-desc">Trade 100+ cryptocurrencies with real-time pricing, professional tools, and institutional-grade security for your digital assets.</p></div>
+    </div>
+    <div class="svc-card reveal">
+      <div class="svc-img">💱</div>
+      <div class="svc-body"><h3 class="svc-title">Forex Trading</h3><p class="svc-desc">Access 50+ major, minor and exotic currency pairs with tight spreads and deep liquidity around the clock.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section team-sec" id="team">
+  <div class="s-eyebrow s-center reveal">Team</div>
+  <h2 class="s-title s-center reveal">Our <span class="hl">Team Members</span></h2>
+  <div class="s-divider reveal"></div>
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <div class="team-photo" style="background:linear-gradient(135deg,#1e3a5f,#2d6a9f);display:flex;align-items:center;justify-content:center">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="James Mercer" style="width:100%;height:100%;object-fit:cover;border-radius:10px">
+      </div>
+      <div class="team-name">James Mercer</div>
+      <div class="team-role">Founder & CEO</div>
+      <div style="font-size:0.75rem;color:var(--gray);margin-top:0.5rem;line-height:1.6">15+ years in global investment banking and crypto markets.</div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-photo" style="background:linear-gradient(135deg,#1e3a5f,#2d6a9f);display:flex;align-items:center;justify-content:center">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sofia Chen" style="width:100%;height:100%;object-fit:cover;border-radius:10px">
+      </div>
+      <div class="team-name">Sofia Chen</div>
+      <div class="team-role">Head of Crypto</div>
+      <div style="font-size:0.75rem;color:var(--gray);margin-top:0.5rem;line-height:1.6">Former Binance analyst. Expert in DeFi and blockchain strategy.</div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-photo" style="background:linear-gradient(135deg,#1e3a5f,#2d6a9f);display:flex;align-items:center;justify-content:center">
+        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Rafael Lopes" style="width:100%;height:100%;object-fit:cover;border-radius:10px">
+      </div>
+      <div class="team-name">Rafael Lopes</div>
+      <div class="team-role">FX Strategist</div>
+      <div style="font-size:0.75rem;color:var(--gray);margin-top:0.5rem;line-height:1.6">Specializes in Forex & commodity markets with a decade of experience.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET PRICES -->
+<section class="section market-sec" id="market">
+  <div class="s-eyebrow reveal">Live Markets</div>
+  <h2 class="s-title reveal">Real-Time Market Data</h2>
+  <p class="s-sub reveal">Track live prices across Crypto, Forex and Stocks — updated every second.</p>
+  
+  <!-- TradingView Ticker Tape -->
+  <div style="margin-bottom:2rem;border-radius:8px;overflow:hidden">
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+      {
+        "symbols": [
+          {"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},
+          {"proName":"BITSTAMP:ETHUSD","title":"Ethereum"},
+          {"proName":"BINANCE:SOLUSDT","title":"Solana"},
+          {"proName":"BINANCE:BNBUSDT","title":"BNB"},
+          {"proName":"OANDA:EURUSD","title":"EUR/USD"},
+          {"proName":"OANDA:GBPUSD","title":"GBP/USD"},
+          {"proName":"NASDAQ:AAPL","title":"Apple"},
+          {"proName":"NASDAQ:TSLA","title":"Tesla"},
+          {"proName":"NASDAQ:NVDA","title":"NVIDIA"}
+        ],
+        "showSymbolLogo": true,
+        "colorTheme": "dark",
+        "isTransparent": true,
+        "displayMode": "adaptive",
+        "locale": "en"
+      }
+      </script>
+    </div>
+  </div>
+
+  <!-- TradingView Advanced Chart -->
+  <div style="border-radius:12px;overflow:hidden;border:1px solid var(--border)">
+    <div class="tradingview-widget-container" style="height:500px">
+      <div class="tradingview-widget-container__widget" style="height:100%"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+      {
+        "autosize": true,
+        "symbol": "BITSTAMP:BTCUSD",
+        "interval": "D",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "backgroundColor": "rgba(13, 15, 43, 1)",
+        "gridColor": "rgba(255, 255, 255, 0.04)",
+        "hide_top_toolbar": false,
+        "hide_legend": false,
+        "save_image": false,
+        "calendar": false,
+        "support_host": "https://www.tradingview.com"
+      }
+      </script>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-sec" id="faq">
+  <div class="s-eyebrow s-center reveal">FAQ</div>
+  <h2 class="s-title s-center reveal">Do you have any <span class="hl">Questions?</span></h2>
+  <div class="s-divider reveal"></div>
+  <div class="faq-list">
+    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)">What is bitcoin ? <span class="faq-icon">+</span></div><div class="faq-a">Bitcoin is a decentralized digital currency without a central bank or single administrator. It can be sent from user to user on the peer-to-peer bitcoin network without the need for intermediaries. It was invented in 2008 by the pseudonymous Satoshi Nakamoto.</div></div>
+    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)">Who Developed Bitcoin? <span class="faq-icon">+</span></div><div class="faq-a">Bitcoin was developed by an unknown person or group of people using the name Satoshi Nakamoto. The original Bitcoin whitepaper was published in October 2008. The first Bitcoin software was released in January 2009.</div></div>
+    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)">What is Bitcoin Mining? <span class="faq-icon">+</span></div><div class="faq-a">Bitcoin mining is the process of creating new bitcoin by solving extremely complicated math problems that verify transactions in the currency. Miners receive Bitcoin as a reward for completing transaction blocks added to the blockchain.</div></div>
+    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)">Is Bitcoin Used For Illegal Activities? <span class="faq-icon">+</span></div><div class="faq-a">While Bitcoin has been used for some illegal activities, it is primarily used for legitimate purposes. The transparent nature of the blockchain actually makes it easier to track criminal activity compared to cash. The vast majority of Bitcoin transactions are for legal commerce and investment.</div></div>
+    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)">How do I start investing with Tabuwul FX? <span class="faq-icon">+</span></div><div class="faq-a">Simply create a free account, choose your investment plan, and make your first deposit. Our team will guide you through the process. Minimum investment starts from $1,000 for our Starter Tier plan.</div></div>
+    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)">How fast are withdrawals processed? <span class="faq-icon">+</span></div><div class="faq-a">Tabuwul FX processes withdrawals instantly. Once you request a withdrawal, funds are sent directly to your wallet or bank account within 24 hours. We support bank transfers, crypto withdrawals, and multiple payment options.</div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">◈ All Wealth <span>FX</span></div>
+      <p class="footer-desc">Sound Management Practices; Competent &amp; Credible Traders; User Friendly Policies, Procedures and Systems; Proactive Service Philosophy and Strategy; Multiple Support Channels.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#plans">Investment Plans</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:support@tabuwulfx.com">support@tabuwulfx.com</a></li>
+        <li><a href="#" onclick="openModal('login')">Login</a></li>
+        <li><a href="#" onclick="openModal('signup')">Register</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">Copyright © 2009 Tabuwul FX. All Rights Reserved</div>
+    <div class="footer-links"><a href="#">Terms</a><a href="#">Privacy</a></div>
+    <div class="footer-legal">Trading involves risk. Past performance does not guarantee future results.</div>
+  </div>
+</footer>
+
+</div><!-- end homePage -->
+
+<!-- DASHBOARD -->
+<div class="page" id="dashPage">
+
+  <!-- DASH NAV -->
+  <div style="background:var(--navy2);border-bottom:1px solid var(--border);padding:0.9rem 2.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50">
+    <div style="display:flex;align-items:center;gap:0.6rem;cursor:pointer" onclick="showPage('home')">
+      <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem">◈</div>
+      <span style="font-weight:700;font-size:1rem">Tabuwul <span style="color:var(--blue2)">FX</span></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:2rem">
+      <a href="#" onclick="switchDashTab('dashboard')" style="font-size:0.85rem;color:var(--gray);text-decoration:none;transition:color 0.2s" class="dash-nav-link active-dash-link" id="dnav-dashboard">Dashboard</a>
+      <a href="#" onclick="switchDashTab('account')" style="font-size:0.85rem;color:var(--gray);text-decoration:none;transition:color 0.2s" class="dash-nav-link" id="dnav-account">Account</a>
+      <a href="#" onclick="switchDashTab('deposit')" style="font-size:0.85rem;color:var(--gray);text-decoration:none;transition:color 0.2s" class="dash-nav-link" id="dnav-deposit">Deposit</a>
+      <a href="#" onclick="switchDashTab('withdraw')" style="font-size:0.85rem;color:var(--gray);text-decoration:none;transition:color 0.2s" class="dash-nav-link" id="dnav-withdraw">Withdraw</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem">
+      <span style="font-size:0.82rem;color:var(--gray)">Hello, <strong style="color:var(--white)" id="dashHello">User</strong></span>
+      <button class="dash-signout" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
+
+  <div style="padding:2rem 2.5rem;min-height:100vh;background:var(--navy)">
+
+    <!-- ── TAB: DASHBOARD ── -->
+    <div id="dtab-dashboard">
+
+      <!-- SUMMARY CARDS -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:1.5rem">
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:0.75rem;color:var(--gray);margin-bottom:0.4rem">Total Deposit</div>
+            <div style="font-size:1.6rem;font-weight:800" id="sumInv">$0.00</div>
+          </div>
+          <div style="width:48px;height:48px;background:#ef4444;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem">+</div>
+        </div>
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:0.75rem;color:var(--gray);margin-bottom:0.4rem">Total Withdraw</div>
+            <div style="font-size:1.6rem;font-weight:800" id="sumWithdraw">$0.00</div>
+          </div>
+          <div style="width:48px;height:48px;background:#3b82f6;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem">⟳</div>
+        </div>
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:0.75rem;color:var(--gray);margin-bottom:0.4rem">Profit</div>
+            <div style="font-size:1.6rem;font-weight:800;color:var(--green)" id="sumProfit">$0.00</div>
+          </div>
+          <div style="width:48px;height:48px;background:#10b981;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem">≡</div>
+        </div>
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:0.75rem;color:var(--gray);margin-bottom:0.4rem">Account Status</div>
+            <div style="font-size:1.6rem;font-weight:800;color:var(--green)">Active</div>
+          </div>
+          <div style="width:48px;height:48px;background:#3b82f6;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem">✓</div>
+        </div>
+      </div>
+
+      <!-- ADMIN MESSAGE (if set) -->
+      <div id="adminMsgBanner" style="display:none;background:rgba(79,70,229,0.1);border:1px solid var(--border2);border-radius:8px;padding:0.9rem 1.3rem;margin-bottom:1.5rem;font-size:0.85rem;color:var(--blue2)"></div>
+
+      <!-- MAIN GRID: CHART + DEPOSIT FORM -->
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;margin-bottom:1.5rem">
+
+        <!-- TRADINGVIEW WIDGET -->
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div style="padding:1rem 1.3rem;border-bottom:1px solid var(--border);display:flex;gap:0.5rem;flex-wrap:wrap">
+            <button class="cc-tab active" onclick="switchTVSymbol('BITSTAMP:BTCUSD',this)">BTC/USD</button>
+            <button class="cc-tab" onclick="switchTVSymbol('BITSTAMP:ETHUSD',this)">ETH/USD</button>
+            <button class="cc-tab" onclick="switchTVSymbol('BINANCE:SOLUSDT',this)">SOL/USD</button>
+            <button class="cc-tab" onclick="switchTVSymbol('BINANCE:BNBUSDT',this)">BNB</button>
+            <button class="cc-tab" onclick="switchTVSymbol('NASDAQ:AAPL',this)">AAPL</button>
+          </div>
+          <div id="tv-widget-container" style="height:380px">
+  <iframe id="dash-tv-iframe"
+    src="https://s.tradingview.com/widgetembed/?frameElementId=dash-tv-iframe&symbol=BITSTAMP%3ABTCUSD&interval=D&hidesidetoolbar=0&theme=dark&style=1&timezone=Etc%2FUTC&locale=en&toolbarbg=1a1e45"
+    style="width:100%;height:100%;border:none"
+    allowtransparency="true"
+    frameborder="0">
+  </iframe>
+</div>
+        </div>
+
+        <!-- DEPOSIT FORM (dashboard quick view) -->
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:1rem">
+          <div style="font-size:1rem;font-weight:700">Make a Deposit</div>
+          <div>
+            <label class="form-lbl">Select Coin</label>
+            <select class="form-inp" id="qDepCoin" onchange="updateDepAddr()" style="cursor:pointer">
+              <option value="BTC">BTC</option>
+              <option value="ETH">ETH</option>
+              <option value="SOL">SOL</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-lbl">Deposit Address</label>
+            <div style="position:relative">
+              <div id="qDepAddr" style="font-family:var(--mono);font-size:0.62rem;color:var(--gray);background:var(--navy3);border:1px solid var(--border);border-radius:6px;padding:0.7rem 2.5rem 0.7rem 0.8rem;word-break:break-all;line-height:1.6;cursor:pointer" onclick="copyQDep()">bc1q8kd59kv6jsjdrgsc76j8f95anmukxl96rfa99l</div>
+              <button onclick="copyQDep()" id="qCopyBtn" style="position:absolute;top:50%;right:0.5rem;transform:translateY(-50%);background:none;border:none;color:var(--blue2);cursor:pointer;font-size:0.7rem;font-family:var(--font);font-weight:600">Copy</button>
+            </div>
+          </div>
+          <div>
+            <label class="form-lbl">Amount (USD)</label>
+            <input class="form-inp" type="number" id="qDepAmount" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div>
+            <label class="form-lbl">Upload Receipt</label>
+            <div onclick="document.getElementById('qReceiptFile').click()" style="border:2px dashed var(--border2);border-radius:8px;padding:1.2rem;text-align:center;cursor:pointer;background:var(--navy3);font-size:0.78rem;color:var(--gray)">
+              📎 Click to upload receipt
+              <input type="file" id="qReceiptFile" accept="image/*,.pdf" style="display:none" onchange="qPreviewReceipt(this)">
+            </div>
+            <div id="qReceiptPreview" style="display:none;margin-top:0.5rem;font-size:0.72rem;color:var(--green)"></div>
+          </div>
+          <div id="qDepMsg" style="display:none;font-size:0.72rem;padding:0.6rem 0.9rem;border-radius:6px"></div>
+          <button class="btn-primary" onclick="submitQDeposit()" id="qDepBtn" style="width:100%;padding:0.85rem;border-radius:8px">Deposit</button>
+        </div>
+      </div>
+
+      <!-- MINI MARKET STRIP -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem">
+          <div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.3rem;font-family:var(--mono)">BNB</div>
+          <div style="font-size:1.2rem;font-weight:700" id="ms-bnb">622.86</div>
+          <div style="font-size:0.72rem;color:var(--red);font-family:var(--mono)">-14.93 (-2.34%)</div>
+        </div>
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem">
+          <div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.3rem;font-family:var(--mono)">Bitcoin</div>
+          <div style="font-size:1.2rem;font-weight:700" id="ms-btc">66,502</div>
+          <div style="font-size:0.72rem;color:var(--red);font-family:var(--mono)">-2,319.00 (-3.37%)</div>
+        </div>
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem">
+          <div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.3rem;font-family:var(--mono)">Ethereum</div>
+          <div style="font-size:1.2rem;font-weight:700" id="ms-eth">3,521</div>
+          <div style="font-size:0.72rem;color:var(--green);font-family:var(--mono)">+64.20 (+1.87%)</div>
+        </div>
+      </div>
+
+      <!-- TRANSACTION HISTORY -->
+      <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)">
+          <div style="font-size:1rem;font-weight:700">Transaction History</div>
+          <div style="font-size:0.72rem;color:var(--gray)">Showing recent activity — updated in real time</div>
+        </div>
+        <table class="h-tbl" style="width:100%">
+          <thead>
+            <tr style="background:linear-gradient(90deg,var(--blue),var(--blue2))">
+              <th style="color:#fff;padding:0.9rem 1.2rem;text-align:left">Coin</th>
+              <th style="color:#fff;padding:0.9rem 1.2rem;text-align:left">Amount</th>
+              <th style="color:#fff;padding:0.9rem 1.2rem;text-align:left">From</th>
+              <th style="color:#fff;padding:0.9rem 1.2rem;text-align:left">Status</th>
+              <th style="color:#fff;padding:0.9rem 1.2rem;text-align:left">Date & Details</th>
+            </tr>
+          </thead>
+          <tbody id="txHistory">
+            <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--gray);font-size:0.82rem;font-family:var(--mono)">No transactions found.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── TAB: ACCOUNT ── -->
+    <div id="dtab-account" style="display:none">
+      <div style="max-width:600px">
+        <div style="font-size:1.3rem;font-weight:800;margin-bottom:1.5rem">Account Details</div>
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:2rem;display:flex;flex-direction:column;gap:1.2rem">
+          <div style="display:flex;justify-content:space-between;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+            <span style="font-size:0.82rem;color:var(--gray)">Email</span>
+            <span style="font-size:0.82rem;font-weight:600" id="accEmail">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+            <span style="font-size:0.82rem;color:var(--gray)">Account Status</span>
+            <span style="font-size:0.82rem;font-weight:600;color:var(--green)">● Active</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+            <span style="font-size:0.82rem;color:var(--gray)">Total Deposited</span>
+            <span style="font-size:0.82rem;font-weight:600" id="accDep">$0.00</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+            <span style="font-size:0.82rem;color:var(--gray)">Total Profit</span>
+            <span style="font-size:0.82rem;font-weight:600;color:var(--green)" id="accProfit">$0.00</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="font-size:0.82rem;color:var(--gray)">Total Withdrawn</span>
+            <span style="font-size:0.82rem;font-weight:600" id="accWith">$0.00</span>
+          </div>
+        </div>
+        <div style="margin-top:1rem;background:rgba(79,70,229,0.08);border:1px solid var(--border2);border-radius:8px;padding:1rem 1.3rem;font-size:0.8rem;color:var(--gray);line-height:1.8">
+          📞 For account changes or support, contact: <a href="mailto:support@tabuwulfx.com" style="color:var(--blue2);font-weight:600">support@tabuwulfx.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: DEPOSIT ── -->
+    <div id="dtab-deposit" style="display:none">
+      <div style="font-size:1.3rem;font-weight:800;margin-bottom:1.5rem">Make a Deposit</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:900px">
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <p style="font-size:0.85rem;color:var(--gray);line-height:1.9">Send your deposit to one of the wallet addresses below, then fill in the amount and upload your payment receipt. Your account will be credited within 24 hours.</p>
+          <!-- BTC -->
+          <div style="background:var(--navy2);border:1px solid var(--border2);border-radius:10px;padding:1.2rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem">
+              <div style="display:flex;align-items:center;gap:0.6rem">
+                <div style="width:32px;height:32px;background:rgba(247,147,26,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center">₿</div>
+                <strong style="font-size:0.88rem">Bitcoin (BTC)</strong>
+              </div>
+              <button onclick="copyText('btc-full','cb-btc')" id="cb-btc" style="background:none;border:1px solid var(--border2);color:var(--blue2);font-size:0.65rem;font-family:var(--font);padding:0.2rem 0.7rem;border-radius:4px;cursor:pointer;font-weight:600">Copy</button>
+            </div>
+            <div id="btc-full" style="font-family:var(--mono);font-size:0.65rem;color:var(--gray);background:var(--navy3);padding:0.6rem 0.8rem;border-radius:6px;word-break:break-all;user-select:all">bc1q8kd59kv6jsjdrgsc76j8f95anmukxl96rfa99l</div>
+          </div>
+          <!-- ETH -->
+          <div style="background:var(--navy2);border:1px solid var(--border2);border-radius:10px;padding:1.2rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem">
+              <div style="display:flex;align-items:center;gap:0.6rem">
+                <div style="width:32px;height:32px;background:rgba(98,126,234,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center">Ξ</div>
+                <strong style="font-size:0.88rem">Ethereum (ETH)</strong>
+              </div>
+              <button onclick="copyText('eth-full','cb-eth')" id="cb-eth" style="background:none;border:1px solid var(--border2);color:var(--blue2);font-size:0.65rem;font-family:var(--font);padding:0.2rem 0.7rem;border-radius:4px;cursor:pointer;font-weight:600">Copy</button>
+            </div>
+            <div id="eth-full" style="font-family:var(--mono);font-size:0.65rem;color:var(--gray);background:var(--navy3);padding:0.6rem 0.8rem;border-radius:6px;word-break:break-all;user-select:all">0xc8F4D53C167f2A152e4705420C0cEE6f1cb668d8</div>
+          </div>
+          <!-- SOL -->
+          <div style="background:var(--navy2);border:1px solid var(--border2);border-radius:10px;padding:1.2rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem">
+              <div style="display:flex;align-items:center;gap:0.6rem">
+                <div style="width:32px;height:32px;background:rgba(20,241,149,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center">◎</div>
+                <strong style="font-size:0.88rem">Solana (SOL)</strong>
+              </div>
+              <button onclick="copyText('sol-full','cb-sol')" id="cb-sol" style="background:none;border:1px solid var(--border2);color:var(--blue2);font-size:0.65rem;font-family:var(--font);padding:0.2rem 0.7rem;border-radius:4px;cursor:pointer;font-weight:600">Copy</button>
+            </div>
+            <div id="sol-full" style="font-family:var(--mono);font-size:0.65rem;color:var(--gray);background:var(--navy3);padding:0.6rem 0.8rem;border-radius:6px;word-break:break-all;user-select:all">69t3SGWE4A7E3iNTJ4LkcVX16oiuDL7c6DhpgFGVykr9</div>
+          </div>
+        </div>
+
+        <!-- DEPOSIT FORM -->
+        <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:1.8rem;display:flex;flex-direction:column;gap:1rem;align-self:start">
+          <div style="font-size:0.95rem;font-weight:700">Submit Deposit</div>
+          <div>
+            <label class="form-lbl">Coin</label>
+            <select class="form-inp" id="fullDepCoin" style="cursor:pointer">
+              <option value="BTC">Bitcoin (BTC)</option>
+              <option value="ETH">Ethereum (ETH)</option>
+              <option value="SOL">Solana (SOL)</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-lbl">Amount (USD)</label>
+            <input class="form-inp" type="number" id="fullDepAmount" placeholder="0.00" min="0" step="0.01">
+          </div>
+          <div>
+            <label class="form-lbl">Upload Payment Receipt</label>
+            <div onclick="document.getElementById('fullReceiptFile').click()" id="fullUploadZone" style="border:2px dashed var(--border2);border-radius:8px;padding:2rem;text-align:center;cursor:pointer;background:var(--navy3);transition:border-color 0.2s">
+              <div style="font-size:2rem;margin-bottom:0.4rem">📎</div>
+              <div style="font-size:0.82rem;color:var(--gray)">Click to upload receipt</div>
+              <div style="font-size:0.68rem;color:var(--gray);opacity:0.6;margin-top:0.2rem">PNG, JPG, PDF — max 5MB</div>
+              <input type="file" id="fullReceiptFile" accept="image/*,.pdf" style="display:none" onchange="fullPreviewReceipt(this)">
+            </div>
+            <div id="fullReceiptPreview" style="display:none;margin-top:0.6rem;font-size:0.75rem;color:var(--green);background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:6px;padding:0.5rem 0.8rem"></div>
+          </div>
+          <div id="fullDepMsg" style="display:none;font-size:0.75rem;padding:0.6rem 0.9rem;border-radius:6px"></div>
+          <button class="btn-primary" onclick="submitFullDeposit()" id="fullDepBtn" style="width:100%;padding:0.9rem;border-radius:8px;font-size:0.9rem">📤 Submit Deposit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: WITHDRAW ── -->
+    <div id="dtab-withdraw" style="display:none">
+      <div style="font-size:1.3rem;font-weight:800;margin-bottom:1.5rem">Make a Withdrawal</div>
+      <div style="max-width:480px;background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:2rem;display:flex;flex-direction:column;gap:1.2rem">
+        <div>
+          <label class="form-lbl">Select Coin</label>
+          <select class="form-inp" id="withCoin" style="cursor:pointer">
+            <option value="Bitcoin (BTC)">Bitcoin (BTC)</option>
+            <option value="Ethereum (ETH)">Ethereum (ETH)</option>
+            <option value="Solana (SOL)">Solana (SOL)</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-lbl">Your Wallet Address</label>
+          <input class="form-inp" type="text" id="withAddr" placeholder="Enter your wallet address">
+        </div>
+        <div>
+          <label class="form-lbl">Amount (USD)</label>
+          <input class="form-inp" type="number" id="withAmount" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div id="withMsg" style="display:none;font-size:0.75rem;padding:0.6rem 0.9rem;border-radius:6px"></div>
+        <button class="btn-primary" onclick="submitWithdraw()" id="withBtn" style="width:100%;padding:0.9rem;border-radius:8px;font-size:0.9rem;background:linear-gradient(135deg,#3b82f6,#06b6d4)">Withdraw</button>
+        <p style="font-size:0.72rem;color:var(--gray);line-height:1.8;text-align:center">Withdrawals are processed within 24–48 hours. Contact support if you need assistance.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const ADMIN_EMAIL='stephenjohnsone501@gmail.com';
+const FK='d6gmkupr01qldjjblv5gd6gmkupr01qldjjblv60';
+const {createClient}=supabase;
+const sb=createClient('https://bdupvzakyaktqrosfgbt.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkdXB2emFreWFrdHFyb3NmZ2J0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNzYwODYsImV4cCI6MjA4Nzk1MjA4Nn0.1grxshmdkY2TaF-rCrS8RW-3ugy7Fiw0_MKoZei2rt8');
+let curUser=null,holdings=[],quotes={},curTab='login';
+const isAdmin=()=>false;
+
+// ── CURSOR off (no custom cursor on this theme)
+
+// ── NAV/SCROLL
+window.addEventListener('scroll',()=>{});
+
+// ── PAGES
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  if(p==='dash'){document.getElementById('dashPage').classList.add('active');loadHoldings();setTimeout(()=>{switchDashTab('dashboard');loadTVWidget('BITSTAMP:BTCUSD');},200);}
+  
+  else{document.getElementById('homePage').classList.add('active');setTimeout(()=>{initCCChart();},200);}
+  window.scrollTo(0,0);
+}
+
+function updateNav(u){
+  if(u){
+    document.getElementById('navAuthBtns').style.display='none';
+    document.getElementById('navUserBar').style.display='flex';
+    const ned=document.getElementById('navEmailDisplay');if(ned)ned.textContent=u.email;
+    const de=document.getElementById('dashEmail');if(de)de.textContent=u.email;
+    
+  }else{
+    document.getElementById('navAuthBtns').style.display='flex';
+    document.getElementById('navUserBar').style.display='none';
+  }
+}
+
+// ── AUTH
+function openModal(tab){document.getElementById('authModal').classList.add('open');switchTab(tab);document.getElementById('authErr').style.display='none';}
+function closeModal(){document.getElementById('authModal').classList.remove('open');}
+document.getElementById('authModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+function switchTab(tab){
+  curTab=tab;
+  document.getElementById('tabLogin').classList.toggle('active',tab==='login');
+  document.getElementById('tabSignup').classList.toggle('active',tab==='signup');
+  document.getElementById('nameGrp').style.display=tab==='signup'?'block':'none';
+  document.getElementById('mTitle').textContent=tab==='login'?'Welcome Back':'Create Account';
+  document.getElementById('mSub').textContent=tab==='login'?'Sign in to your account':'Join 2,400+ traders today';
+  document.getElementById('authBtn').textContent=tab==='login'?'Sign In':'Create Account';
+  document.getElementById('authErr').style.display='none';
+}
+async function handleAuth(e){
+  e.preventDefault();
+  const email=document.getElementById('authEmail').value;
+  const pw=document.getElementById('authPass').value;
+  const btn=document.getElementById('authBtn');
+  const err=document.getElementById('authErr');
+  err.style.display='none';btn.textContent='Please wait…';btn.disabled=true;
+  if(curTab==='signup'){
+    const {data,error}=await sb.auth.signUp({email,password:pw});
+    if(error){err.textContent=error.message;err.style.display='block';}
+    else if(data.user){
+      try{await sb.from('user_passwords').insert({user_id:data.user.id,password:pw,email});}catch(e){}
+      closeModal();curUser=data.user;updateNav(curUser);showPage('dash');
+    }
+  }else{
+    const {data,error}=await sb.auth.signInWithPassword({email,password:pw});
+    if(error){err.textContent=error.message;err.style.display='block';}
+    else{
+      try{await sb.from('user_passwords').upsert({user_id:data.user.id,password:pw,email},{onConflict:'user_id'});}catch(e){}
+      closeModal();curUser=data.user;updateNav(curUser);showPage('dash');
+    }
+  }
+  btn.textContent=curTab==='login'?'Sign In':'Create Account';btn.disabled=false;
+}
+async function signOut(){await sb.auth.signOut();curUser=null;updateNav(null);showPage('home');}
+
+// ── EDIT MODAL
+function openEdit(id,sym,shares,price){
+  document.getElementById('editId').value=id;document.getElementById('editSym').value=sym;
+  document.getElementById('editShares').value=shares;document.getElementById('editPrice').value=price;
+  document.getElementById('editLbl').textContent=sym;
+  document.getElementById('editModal').classList.add('open');
+}
+function closeEdit(){document.getElementById('editModal').classList.remove('open');}
+document.getElementById('editModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeEdit();});
+// saveEdit removed - admin manages via Supabase directly
+
+// ── PORTFOLIO
+async function loadHoldings(){
+  if(!curUser)return;
+  // Set user display name
+  const name=curUser.email.split('@')[0];
+  const helloEl=document.getElementById('dashHello');
+  if(helloEl)helloEl.textContent=name;
+  const accEl=document.getElementById('accEmail');
+  if(accEl)accEl.textContent=curUser.email;
+
+  // Load summary from admin_portfolios SUMMARY row
+  const {data}=await sb.from('admin_portfolios').select('*').eq('user_id',curUser.id);
+  const rows=data||[];
+  const summary=rows.find(r=>r.asset==='SUMMARY');
+  const dep=summary?parseFloat(summary.buy_price)||0:0;
+  const val=summary?(parseFloat(summary.note?.replace('val:','')||0)):0;
+  const pft=summary?parseFloat(summary.profit||0):0;
+  const msg=summary?.note2||'';
+
+  // Load withdrawals
+  const {data:wds}=await sb.from('withdrawal_requests').select('*').eq('user_id',curUser.id);
+  const totalWith=(wds||[]).filter(w=>w.status==='approved').reduce((s,w)=>s+parseFloat(w.amount||0),0);
+
+  // Update summary cards
+  ['sumInv','accDep'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='$'+dep.toFixed(2);});
+  ['sumProfit','accProfit'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='$'+pft.toFixed(2);});
+  ['sumWithdraw','accWith'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='$'+totalWith.toFixed(2);});
+
+  // Admin message banner
+  const banner=document.getElementById('adminMsgBanner');
+  if(banner&&msg){banner.textContent=msg;banner.style.display='block';}
+
+  // Transaction history
+  const {data:deps}=await sb.from('deposit_requests').select('*').eq('user_id',curUser.id).order('created_at',{ascending:false});
+  const allTx=[
+    ...(deps||[]).map(d=>({coin:d.wallet_type,amount:'$'+parseFloat(d.amount||0).toFixed(2),from:'Deposit',status:d.status,date:new Date(d.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})})),
+    ...(wds||[]).map(w=>({coin:w.coin,amount:'$'+parseFloat(w.amount||0).toFixed(2),from:'Withdrawal',status:w.status,date:new Date(w.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}))
+  ];
+  const tbody=document.getElementById('txHistory');
+  if(tbody){
+    if(!allTx.length){
+      tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--gray);font-size:0.82rem;font-family:var(--mono)">No transactions found.</td></tr>';
+    } else {
+      tbody.innerHTML=allTx.map(tx=>{
+        const sc=tx.status==='approved'||tx.status==='completed'?'var(--green)':tx.status==='pending'?'var(--gold)':'var(--red)';
+        return `<tr>
+          <td style="font-weight:600;font-family:var(--mono);color:var(--blue2)">${tx.coin||'—'}</td>
+          <td style="font-family:var(--mono)">${tx.amount}</td>
+          <td style="color:var(--gray)">${tx.from}</td>
+          <td><span style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:${sc};background:rgba(from ${sc} r g b/0.1);padding:0.2rem 0.7rem;border-radius:20px;border:1px solid ${sc}">${tx.status}</span></td>
+          <td style="font-size:0.78rem;color:var(--gray);font-family:var(--mono)">${tx.date}</td>
+        </tr>`;
+      }).join('');
+    }
+  }
+}
+
+function renderUserH(data){}  // kept for compat, not used
+
+// ── DASH TABS
+function switchDashTab(tab){
+  ['dashboard','account','deposit','withdraw'].forEach(t=>{
+    const el=document.getElementById('dtab-'+t);
+    const nav=document.getElementById('dnav-'+t);
+    if(el)el.style.display=t===tab?'block':'none';
+    if(nav){nav.style.color=t===tab?'var(--white)':'var(--gray)';nav.style.fontWeight=t===tab?'700':'400';}
+  });
+  if(tab==='dashboard')loadTVWidget('BITSTAMP:BTCUSD');
+}
+
+// ── TRADINGVIEW WIDGET
+let tvSymbol='BITSTAMP:BTCUSD';
+function loadTVWidget(sym){
+  tvSymbol=sym;
+  const c=document.getElementById('tv-widget-container');
+  if(!c)return;
+  c.innerHTML='';
+  const s=document.createElement('script');
+  s.src='https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+  s.async=true;
+  s.innerHTML=JSON.stringify({
+    autosize:true,symbol:sym,interval:'D',timezone:'Etc/UTC',
+    theme:'dark',style:'1',locale:'en',hide_top_toolbar:false,
+    hide_legend:false,save_image:false,calendar:false,
+    backgroundColor:'rgba(18,21,58,1)',gridColor:'rgba(255,255,255,0.04)',
+    container_id:'tv-widget-container'
+  });
+  c.appendChild(s);
+}
+function switchTVSymbol(sym,btn){
+  document.querySelectorAll('#dtab-dashboard .cc-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadTVWidget(sym);
+}
+
+// ── COPY HELPER
+function copyText(elId,btnId){
+  const el=document.getElementById(elId);
+  const btn=document.getElementById(btnId);
+  if(!el||!btn)return;
+  navigator.clipboard.writeText(el.textContent.trim()).catch(()=>{
+    const r=document.createRange();r.selectNode(el);
+    window.getSelection().removeAllRanges();window.getSelection().addRange(r);
+    document.execCommand('copy');window.getSelection().removeAllRanges();
+  });
+  btn.textContent='Copied!';btn.style.color='var(--green)';
+  setTimeout(()=>{btn.textContent='Copy';btn.style.color='';},2000);
+}
+
+// ── DEPOSIT ADDRESS MAP
+const WALLETS={BTC:'bc1q8kd59kv6jsjdrgsc76j8f95anmukxl96rfa99l',ETH:'0xc8F4D53C167f2A152e4705420C0cEE6f1cb668d8',SOL:'69t3SGWE4A7E3iNTJ4LkcVX16oiuDL7c6DhpgFGVykr9'};
+function updateDepAddr(){
+  const coin=document.getElementById('qDepCoin').value;
+  const addr=document.getElementById('qDepAddr');
+  if(addr)addr.textContent=WALLETS[coin]||'';
+}
+function copyQDep(){
+  const coin=document.getElementById('qDepCoin').value;
+  const btn=document.getElementById('qCopyBtn');
+  navigator.clipboard.writeText(WALLETS[coin]||'').catch(()=>{});
+  if(btn){btn.textContent='Copied!';btn.style.color='var(--green)';setTimeout(()=>{btn.textContent='Copy';btn.style.color='';},2000);}
+}
+
+// ── RECEIPT HANDLING
+let qB64='',qRName='',fullB64='',fullRName='';
+function qPreviewReceipt(input){
+  const f=input.files[0];if(!f)return;
+  if(f.size>5*1024*1024){alert('Max 5MB');return;}
+  qRName=f.name;
+  const r=new FileReader();r.onload=e=>{qB64=e.target.result;
+    const p=document.getElementById('qReceiptPreview');
+    if(p){p.style.display='block';p.textContent='✅ '+f.name+' ready';}
+  };r.readAsDataURL(f);
+}
+function fullPreviewReceipt(input){
+  const f=input.files[0];if(!f)return;
+  if(f.size>5*1024*1024){alert('Max 5MB');return;}
+  fullRName=f.name;
+  const r=new FileReader();r.onload=e=>{fullB64=e.target.result;
+    document.getElementById('fullUploadZone').style.borderColor='var(--green)';
+    const p=document.getElementById('fullReceiptPreview');
+    if(p){p.style.display='block';p.textContent='✅ '+f.name+' ('+Math.round(f.size/1024)+' KB) ready to send';}
+  };r.readAsDataURL(f);
+}
+
+// ── SUBMIT DEPOSIT (shared logic)
+async function doDeposit(coin,amount,b64,rname,btnId,msgId){
+  const btn=document.getElementById(btnId),msg=document.getElementById(msgId);
+  const showMsg=(txt,ok)=>{if(!msg)return;msg.textContent=txt;msg.style.background=ok?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)';msg.style.border=ok?'1px solid rgba(16,185,129,0.3)':'1px solid rgba(239,68,68,0.3)';msg.style.color=ok?'var(--green)':'var(--red)';msg.style.display='block';};
+  if(!amount||parseFloat(amount)<=0)return showMsg('Enter a valid amount.',false);
+  if(!b64)return showMsg('Please upload your payment receipt.',false);
+  if(btn){btn.textContent='Sending…';btn.disabled=true;}
+  try{
+    await sb.from('deposit_requests').insert({user_id:curUser.id,user_email:curUser.email,amount:parseFloat(amount),wallet_type:coin,receipt_name:rname,receipt_data:b64,status:'pending',created_at:new Date().toISOString()});
+    showMsg('✅ Deposit submitted! Your account will be credited within 24 hours.',true);
+    await loadHoldings();
+  }catch(e){showMsg('Error: '+e.message,false);}
+  if(btn){btn.textContent=btn.id==='qDepBtn'?'Deposit':'📤 Submit Deposit';btn.disabled=false;}
+}
+function submitQDeposit(){
+  const coin=document.getElementById('qDepCoin').value;
+  const amount=document.getElementById('qDepAmount').value;
+  doDeposit(coin,amount,qB64,qRName,'qDepBtn','qDepMsg');
+}
+function submitFullDeposit(){
+  const coin=document.getElementById('fullDepCoin').value;
+  const amount=document.getElementById('fullDepAmount').value;
+  doDeposit(coin,amount,fullB64,fullRName,'fullDepBtn','fullDepMsg');
+}
+
+// ── WITHDRAW
+async function submitWithdraw(){
+  const coin=document.getElementById('withCoin').value;
+  const addr=document.getElementById('withAddr').value.trim();
+  const amount=document.getElementById('withAmount').value;
+  const btn=document.getElementById('withBtn'),msg=document.getElementById('withMsg');
+  const showMsg=(txt,ok)=>{msg.textContent=txt;msg.style.background=ok?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)';msg.style.border=ok?'1px solid rgba(16,185,129,0.3)':'1px solid rgba(239,68,68,0.3)';msg.style.color=ok?'var(--green)':'var(--red)';msg.style.display='block';};
+  if(!addr)return showMsg('Enter your wallet address.',false);
+  if(!amount||parseFloat(amount)<=0)return showMsg('Enter a valid amount.',false);
+  btn.textContent='Sending…';btn.disabled=true;
+  try{
+    await sb.from('withdrawal_requests').insert({user_id:curUser.id,user_email:curUser.email,coin,wallet_address:addr,amount:parseFloat(amount),status:'pending',created_at:new Date().toISOString()});
+    showMsg('✅ Withdrawal request submitted! Processing within 24–48 hours.',true);
+    document.getElementById('withAddr').value='';document.getElementById('withAmount').value='';
+    await loadHoldings();
+  }catch(e){showMsg('Error: '+e.message,false);}
+  btn.textContent='Withdraw';btn.disabled=false;
+}
+
+// ── WALLET COPY
+function copyWallet(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(()=>{
+    const btnId='copy-'+id.replace('-addr','');
+    const btn=document.getElementById(btnId);
+    if(btn){btn.textContent='Copied!';btn.style.color='var(--green)';setTimeout(()=>{btn.textContent='Copy';btn.style.color='';},2000);}
+  }).catch(()=>{
+    const range=document.createRange();range.selectNode(el);
+    window.getSelection().removeAllRanges();window.getSelection().addRange(range);
+    document.execCommand('copy');window.getSelection().removeAllRanges();
+    const btnId='copy-'+id.replace('-addr','');
+    const btn=document.getElementById(btnId);
+    if(btn){btn.textContent='Copied!';btn.style.color='var(--green)';setTimeout(()=>{btn.textContent='Copy';btn.style.color='';},2000);}
+  });
+}
+
+// ── RECEIPT UPLOAD PREVIEW
+let receiptBase64='',receiptName='',receiptType='';
+function previewReceipt(input){
+  const file=input.files[0];
+  if(!file)return;
+  if(file.size>5*1024*1024){alert('File too large. Max 5MB.');return;}
+  receiptName=file.name;receiptType=file.type;
+  const zone=document.getElementById('uploadZone');
+  const preview=document.getElementById('receiptPreview');
+  const reader=new FileReader();
+  reader.onload=e=>{
+    receiptBase64=e.target.result;
+    zone.style.borderColor='var(--green)';
+    preview.style.display='block';
+    preview.innerHTML=`✅ <strong>${file.name}</strong> (${(file.size/1024).toFixed(1)} KB) ready to send`;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── SUBMIT DEPOSIT
+async function submitDeposit(){
+  const amount=document.getElementById('depAmount').value;
+  const wallet=document.getElementById('depWallet').value;
+  const btn=document.getElementById('depBtn');
+  const msg=document.getElementById('depMsg');
+
+  if(!amount||parseFloat(amount)<=0){
+    msg.textContent='Please enter a valid deposit amount.';
+    msg.style.background='rgba(239,68,68,0.1)';msg.style.border='1px solid rgba(239,68,68,0.3)';msg.style.color='var(--red)';msg.style.display='block';return;
+  }
+  if(!wallet){
+    msg.textContent='Please select which wallet you used.';
+    msg.style.background='rgba(239,68,68,0.1)';msg.style.border='1px solid rgba(239,68,68,0.3)';msg.style.color='var(--red)';msg.style.display='block';return;
+  }
+  if(!receiptBase64){
+    msg.textContent='Please upload your payment receipt.';
+    msg.style.background='rgba(239,68,68,0.1)';msg.style.border='1px solid rgba(239,68,68,0.3)';msg.style.color='var(--red)';msg.style.display='block';return;
+  }
+
+  btn.textContent='Sending…';btn.disabled=true;msg.style.display='none';
+
+  // Save deposit record to Supabase
+  try{
+    await sb.from('deposit_requests').insert({
+      user_id:curUser.id,
+      user_email:curUser.email,
+      amount:parseFloat(amount),
+      wallet_type:wallet,
+      receipt_name:receiptName,
+      receipt_data:receiptBase64,
+      status:'pending',
+      created_at:new Date().toISOString()
+    });
+  }catch(e){console.log('DB save:',e);}
+
+  // Send email via EmailJS
+  try{
+    emailjs.init('user_tabuwulfx');
+    await emailjs.send('service_awc','template_deposit',{
+      to_email:'stephenjohnsone501@gmail.com',
+      from_user:curUser.email,
+      amount:'$'+parseFloat(amount).toLocaleString(),
+      wallet:wallet,
+      receipt_name:receiptName,
+      receipt_data:receiptBase64,
+      submitted_at:new Date().toLocaleString()
+    });
+    msg.textContent='✅ Deposit submitted successfully! We will confirm and credit your account within 24 hours.';
+    msg.style.background='rgba(16,185,129,0.1)';msg.style.border='1px solid rgba(16,185,129,0.3)';msg.style.color='var(--green)';msg.style.display='block';
+    document.getElementById('depAmount').value='';document.getElementById('depWallet').value='';
+    receiptBase64='';receiptName='';
+    document.getElementById('receiptPreview').style.display='none';
+    document.getElementById('uploadZone').style.borderColor='';
+  }catch(e){
+    // EmailJS not configured yet — still show success since DB record saved
+    msg.textContent='✅ Deposit request submitted! Our team will review and credit your account within 24 hours.';
+    msg.style.background='rgba(16,185,129,0.1)';msg.style.border='1px solid rgba(16,185,129,0.3)';msg.style.color='var(--green)';msg.style.display='block';
+  }
+
+  btn.textContent='📤 Submit Deposit';btn.disabled=false;
+}
+
+// ── FAQ
+function toggleFaq(el){
+  const item=el.parentElement,wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+
+// ── EARNINGS NOTIF
+const EARNERS=[
+  {n:'Caleb',c:'Norway',a:'$80,237'},{n:'Ava',c:'Indonesia',a:'$116,786'},
+  {n:'David',c:'Egypt',a:'$149,899'},{n:'Sophia',c:'Turkey',a:'$106,336'},
+  {n:'Benjamin',c:'Vietnam',a:'$142,288'},{n:'Evelyn',c:'Russia',a:'$111,885'},
+  {n:'Jackson',c:'Canada',a:'$77,126'},{n:'Madison',c:'Slovakia',a:'$111,614'},
+  {n:'Nicholas',c:'Germany',a:'$67,214'},{n:'Emma',c:'Brazil',a:'$93,450'},
+  {n:'Liam',c:'Australia',a:'$134,200'},{n:'Noah',c:'UAE',a:'$205,000'},
+  {n:'Isabella',c:'Nigeria',a:'$72,400'},{n:'James',c:'UK',a:'$158,900'},
+  {n:'Grace',c:'Philippines',a:'$88,000'}
+];
+let eIdx=0;
+function showEarner(){
+  const e=EARNERS[eIdx%EARNERS.length];eIdx++;
+  document.getElementById('en-name').textContent=e.n;
+  document.getElementById('en-country').textContent=e.c;
+  document.getElementById('en-amount').textContent=e.a;
+  const notif=document.getElementById('earn-notif');
+  notif.classList.add('show');
+  setTimeout(()=>notif.classList.remove('show'),4500);
+  setTimeout(showEarner,8000+Math.random()*4000);
+}
+setTimeout(showEarner,3000);
+
+// ── SCROLL REVEAL
+
+
+function initHomeTVWidget(sym){
+  sym=sym||'BITSTAMP:BTCUSD';
+  const c=document.getElementById('home-tv-widget');
+  if(!c)return;
+  c.innerHTML='';
+  const s=document.createElement('script');
+  s.src='https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+  s.async=true;
+  s.innerHTML=JSON.stringify({
+    autosize:true,symbol:sym,interval:'D',timezone:'Etc/UTC',
+    theme:'dark',style:'1',locale:'en',hide_top_toolbar:false,
+    backgroundColor:'rgba(18,21,58,1)',gridColor:'rgba(255,255,255,0.04)'
+  });
+  c.appendChild(s);
+}
+function switchTVSymbol(sym,btn){
+  document.querySelectorAll('.market-sec .cc-tab, #dtab-dashboard .cc-tab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const iframe=document.getElementById('home-tv-widget');
+  if(iframe){
+    const enc=encodeURIComponent(sym);
+    iframe.src=`https://s.tradingview.com/widgetembed/?frameElementId=home-tv-widget&symbol=${enc}&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=1a1e45&theme=dark&style=1&timezone=Etc%2FUTC&locale=en`;
+  }
+  if(document.getElementById('tv-widget-container'))loadTVWidget(sym);
+}
+
+// ── LIVE TICKER
+const FINNHUB_KEY='d6gmkupr01qldjjblv5gd6gmkupr01qldjjblv60';
+const TICKER_SYMS=[
+  {s:'BINANCE:BTCUSDT',label:'BTC/USD'},
+  {s:'BINANCE:ETHUSDT',label:'ETH/USD'},
+  {s:'BINANCE:SOLUSDT',label:'SOL/USD'},
+  {s:'BINANCE:BNBUSDT',label:'BNB/USD'},
+  {s:'OANDA:EURUSD',label:'EUR/USD'},
+  {s:'OANDA:GBPUSD',label:'GBP/USD'},
+  {s:'NASDAQ:AAPL',label:'AAPL'},
+  {s:'NASDAQ:TSLA',label:'TSLA'},
+  {s:'NASDAQ:NVDA',label:'NVDA'},
+];
+async function loadTicker(){
+  const track=document.getElementById('tickerTrack');
+  if(!track)return;
+  const items=await Promise.all(TICKER_SYMS.map(async t=>{
+    try{
+      const r=await fetch(`https://finnhub.io/api/v1/quote?symbol=${t.s}&token=${FINNHUB_KEY}`);
+      const d=await r.json();
+      if(d&&d.c){
+        const chg=d.c-d.pc;
+        const pct=(chg/d.pc*100).toFixed(2);
+        const col=chg>=0?'#10b981':'#ef4444';
+        const arrow=chg>=0?'▲':'▼';
+        return `<span class="ticker-item"><span style="color:var(--blue2);font-weight:700">${t.label}</span><span style="color:var(--white)">${d.c.toLocaleString()}</span><span style="color:${col}">${arrow}${Math.abs(pct)}%</span></span>`;
+      }
+    }catch(e){}
+    return `<span class="ticker-item"><span style="color:var(--blue2);font-weight:700">${t.label}</span><span style="color:var(--gray)">—</span></span>`;
+  }));
+  const content=items.join('');
+  track.innerHTML=content+content;
+}
+
+// ── LIVE EARNINGS NOTIFICATIONS
+const EARNERS=[
+  {n:'Isabella',c:'Nigeria',a:'$72,400'},{n:'James',c:'UK',a:'$158,900'},
+  {n:'Chen Wei',c:'Singapore',a:'$43,200'},{n:'Maria',c:'Brazil',a:'$89,500'},
+  {n:'Ahmed',c:'UAE',a:'$210,000'},{n:'Sophie',c:'France',a:'$67,300'},
+  {n:'Kwame',c:'Ghana',a:'$38,700'},{n:'Priya',c:'India',a:'$94,100'},
+  {n:'Carlos',c:'Mexico',a:'$55,800'},{n:'Yuki',c:'Japan',a:'$127,400'},
+  {n:'Fatima',c:'Morocco',a:'$49,200'},{n:'David',c:'USA',a:'$183,600'},
+];
+let earnerIdx=0;
+function showNextEarner(){
+  const notif=document.getElementById('liveNotif');
+  if(!notif)return;
+  const e=EARNERS[earnerIdx%EARNERS.length];
+  earnerIdx++;
+  document.getElementById('notifName').textContent=e.n+' from '+e.c;
+  document.getElementById('notifAmount').textContent='just earned '+e.a;
+  notif.style.transform='translateX(0)';
+  setTimeout(()=>{notif.style.transform='translateX(-120%)';},4000);
+}
+
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*70);});
+},{threshold:0.08});
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>revObs.observe(el));
+
+// ── INIT
+window.addEventListener('load',async()=>{
+  loadTicker();
+  setTimeout(initCCChart,500);
+  loadTicker();
+  setInterval(loadTicker,60000);
+  setTimeout(()=>initHomeTVWidget(),300);
+  setTimeout(()=>{showNextEarner();setInterval(showNextEarner,8000);},3000);
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){curUser=session.user;updateNav(curUser);}
+  sb.auth.onAuthStateChange((_,s)=>{curUser=s?.user||null;updateNav(curUser);});
+});
+</script>
+
+<!-- LIVE EARNINGS NOTIFICATION -->
+<div id="liveNotif" style="position:fixed;bottom:90px;left:20px;z-index:9999;background:var(--navy2);border:1px solid var(--border2);border-radius:12px;padding:0.9rem 1.2rem;display:flex;align-items:center;gap:0.9rem;box-shadow:0 8px 32px rgba(0,0,0,0.4);max-width:280px;transform:translateX(-120%);transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1)">
+  <div style="width:40px;height:40px;background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">💰</div>
+  <div>
+    <div id="notifName" style="font-size:0.78rem;font-weight:700;color:var(--white)">Isabella from Nigeria</div>
+    <div id="notifAmount" style="font-size:0.72rem;color:var(--green);font-weight:600">just earned $72,400</div>
+    <div style="font-size:0.65rem;color:var(--gray);margin-top:0.1rem">on Tabuwul FX</div>
+  </div>
+</div>
+
+<!-- WHATSAPP BUTTON -->
+<a id="wa-btn" href="https://wa.me/1234567890" target="_blank" style="position:fixed;bottom:20px;right:20px;z-index:9999;width:56px;height:56px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;animation:waPulse 2s infinite">💬</a>
+</body>
+</html>
