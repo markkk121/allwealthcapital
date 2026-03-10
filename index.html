@@ -1139,19 +1139,30 @@ async function loadTicker(){
 
 // ── INIT
 window.addEventListener('DOMContentLoaded',async()=>{
-  const {data:{session}}=await sb.auth.getSession();
-  if(session?.user){
-    curUser=session.user;
-    updateNav(curUser);
-    const lastPage=sessionStorage.getItem('tabuwul_page');
-    if(lastPage==='dash'){
-      showPage('dash');
+  // Fallback: force show home after 3 seconds no matter what
+  const fallback=setTimeout(()=>{
+    document.body.classList.remove('page-loading');
+    const loader=document.getElementById('pageLoader');
+    if(loader)loader.style.display='none';
+    if(!curUser)showPage('home');
+  },3000);
+
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(session?.user){
+      curUser=session.user;
+      updateNav(curUser);
+      const lastPage=sessionStorage.getItem('tabuwul_page');
+      if(lastPage==='dash'){showPage('dash');}
+      else{showPage('home');}
     } else {
       showPage('home');
     }
-  } else {
+  }catch(e){
+    console.error('Session error:',e);
     showPage('home');
   }
+  clearTimeout(fallback);
   document.body.classList.remove('page-loading');
   const loader=document.getElementById('pageLoader');
   if(loader)loader.style.display='none';
