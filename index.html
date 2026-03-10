@@ -1078,3 +1078,27 @@ async function loadTicker(){
     try{
       const r=await fetch(`https://finnhub.io/api/v1/quote?symbol=${t.s}&token=${FINNHUB_KEY}`);
       const d=await r.json();
+    if(d&&d.c){
+        const chg=d.c-d.pc,pct=(chg/d.pc*100).toFixed(2);
+        const up=chg>=0;
+        return `<span class="ticker-item"><span class="sym">${t.l}</span> ${d.c.toLocaleString()} <span class="${up?'up':'dn'}">${up?'▲':'▼'}${Math.abs(pct)}%</span></span>`;
+      }
+    }catch(e){}
+    return '';
+  }));
+  const content2=items.filter(Boolean).join('');
+  if(content2)track.innerHTML=content2+content2;
+}
+
+// ── INIT
+window.addEventListener('load',async()=>{
+  const {data:{session}}=await sb.auth.getSession();
+  if(session?.user){curUser=session.user;updateNav(curUser);}
+  setTimeout(()=>showNextEarner(),3000);
+  setInterval(()=>showNextEarner(),8000);
+  loadTicker();
+  setInterval(loadTicker,60000);
+});
+</script>
+</body>
+</html>
