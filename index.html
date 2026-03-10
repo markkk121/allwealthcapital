@@ -322,7 +322,7 @@ footer{background:var(--navy);color:rgba(255,255,255,0.6);padding:4rem 3rem 2rem
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="tb-lang">🇬🇧 English</div>
-  <a href="mailto:support@tabuwulfx.com">✉ support@tabuwulfx.com</a>
+  <a href="/cdn-cgi/l/email-protection#4734323737283533073326253230322b213f6924282a">✉ <span class="__cf_email__" data-cfemail="a3d0d6d3d3ccd1d7e3d7c2c1d6d4d6cfc5db8dc0ccce">[email&#160;protected]</span></a>
 </div>
 
 <!-- NAV -->
@@ -537,7 +537,7 @@ footer{background:var(--navy);color:rgba(255,255,255,0.6);padding:4rem 3rem 2rem
       <!-- TradingView Widget BEGIN -->
       <div class="tradingview-widget-container" style="height:500px;width:100%">
         <div id="tradingview_chart" style="height:100%;width:100%"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
         <script type="text/javascript">
         var tvWidget;
         function initTVWidget(sym){
@@ -593,7 +593,7 @@ footer{background:var(--navy);color:rgba(255,255,255,0.6);padding:4rem 3rem 2rem
     <div>
       <div class="footer-brand"><div style="width:32px;height:32px;background:linear-gradient(135deg,var(--blue),var(--blue3));border-radius:8px;display:flex;align-items:center;justify-content:center">◈</div> Tabuwul <span style="color:var(--blue3)">FX</span></div>
       <p class="footer-desc">Tabuwul FX is a leading trade and investment company specializing in Cryptocurrency, Forex, and Stock market investments with guaranteed ROIs and 24/7 support.</p>
-      <a href="mailto:support@tabuwulfx.com" style="color:var(--blue3);font-size:0.82rem">✉ support@tabuwulfx.com</a>
+      <a href="/cdn-cgi/l/email-protection#ed9e989d9d829f99ad998c8f989a98818b95c38e8280" style="color:var(--blue3);font-size:0.82rem">✉ <span class="__cf_email__" data-cfemail="2e5d5b5e5e415c5a6e5a4f4c5b595b424856004d4143">[email&#160;protected]</span></a>
     </div>
     <div class="footer-col">
       <h4>Quick Links</h4>
@@ -608,7 +608,7 @@ footer{background:var(--navy);color:rgba(255,255,255,0.6);padding:4rem 3rem 2rem
     <div class="footer-col">
       <h4>Contact</h4>
       <ul>
-        <li><a href="mailto:support@tabuwulfx.com">support@tabuwulfx.com</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#6d1e181d1d021f192d190c0f181a18010b15430e0200"><span class="__cf_email__" data-cfemail="ccbfb9bcbca3beb88cb8adaeb9bbb9a0aab4e2afa3a1">[email&#160;protected]</span></a></li>
         <li><a href="#">WhatsApp Support</a></li>
         <li><a href="#">Live Chat</a></li>
         <li><a href="#">+44 20 7946 0958</a></li>
@@ -718,7 +718,7 @@ footer{background:var(--navy);color:rgba(255,255,255,0.6);padding:4rem 3rem 2rem
           <div class="account-row"><span>Total Withdrawn</span><span id="accWith">$0.00</span></div>
         </div>
         <div style="margin-top:1rem;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:1rem 1.3rem;font-size:0.8rem;color:#1d4ed8">
-          📞 For support contact: <strong>support@tabuwulfx.com</strong>
+          📞 For support contact: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f2c2a2f2f302d2b1f2b3e3d2a282a333927713c3032">[email&#160;protected]</a></strong>
         </div>
       </div>
     </div>
@@ -807,7 +807,7 @@ footer{background:var(--navy);color:rgba(255,255,255,0.6);padding:4rem 3rem 2rem
 <!-- WHATSAPP -->
 <a id="wa-btn" href="https://wa.me/1234567890" target="_blank">💬</a>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── SUPABASE
 const sb=supabase.createClient('https://bdupvzakyaktqrosfgbt.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkdXB2emFreWFrdHFyb3NmZ2J0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNzYwODYsImV4cCI6MjA4Nzk1MjA4Nn0.1grxshmdkY2TaF-rCrS8RW-3ugy7Fiw0_MKoZei2rt8');
 let curUser=null;
@@ -818,8 +818,10 @@ function showPage(p){
   if(p==='dash'){
     document.getElementById('dashPage').style.display='block';
     loadHoldings();
+    subscribeRealtime();
     setTimeout(()=>{switchDashTab('dashboard');initDashTV('BITSTAMP:BTCUSD');},200);
   } else {
+    unsubscribeRealtime();
     document.getElementById('homePage').style.display='block';
   }
 }
@@ -880,7 +882,7 @@ async function doAuth(){
   }catch(e){err.textContent=e.message;err.style.display='block';}
   btn.textContent=tab==='login'?'Sign In':'Create Account';btn.disabled=false;
 }
-async function signOut(){await sb.auth.signOut();curUser=null;updateNav(null);showPage('home');}
+async function signOut(){unsubscribeRealtime();await sb.auth.signOut();curUser=null;updateNav(null);showPage('home');}
 
 // ── PASSWORD GATE
 function openPwGate(){
@@ -901,32 +903,60 @@ async function loadHoldings(){
   const name=curUser.email.split('@')[0];
   const el=document.getElementById('dashHello');if(el)el.textContent=name;
   const ae=document.getElementById('accEmail');if(ae)ae.textContent=curUser.email;
-  const {data}=await sb.from('admin_portfolios').select('*').eq('user_id',curUser.id);
-  const rows=data||[];
-  const summary=rows.find(r=>r.asset==='SUMMARY');
-  const dep=summary?parseFloat(summary.buy_price)||0:0;
-  const pft=summary?parseFloat(summary.profit||0):0;
-  const msg=summary?.note2||'';
-  const {data:wds}=await sb.from('withdrawal_requests').select('*').eq('user_id',curUser.id);
-  const totalWith=(wds||[]).filter(w=>w.status==='approved').reduce((s,w)=>s+parseFloat(w.amount||0),0);
-  ['sumInv','accDep'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='$'+dep.toFixed(2);});
-  ['sumProfit','accProfit'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='$'+pft.toFixed(2);});
-  ['sumWithdraw','accWith'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='$'+totalWith.toFixed(2);});
+
+  // ── Read from user_portfolios (admin edits here, reflects instantly on user dashboard)
+  const {data:pfRows,error:pfErr}=await sb.from('user_portfolios').select('*').eq('user_id',curUser.id);
+  console.log('[Tabuwul] portfolio fetch:',pfRows,pfErr);
+  const portfolio=pfRows&&pfRows.length>0?pfRows[0]:null;
+  if(!portfolio){
+    // Auto-create row for this user if admin hasn't added them yet
+    const {error:upsertErr}=await sb.from('user_portfolios').upsert({user_id:curUser.id,user_email:curUser.email,total_deposit:0,total_withdraw:0,total_profit:0},{onConflict:'user_id'});
+    console.log('[Tabuwul] auto-created portfolio row, err:',upsertErr);
+  }
+  const dep=portfolio?parseFloat(portfolio.total_deposit)||0:0;
+  const pft=portfolio?parseFloat(portfolio.total_profit)||0:0;
+  const totalWith=portfolio?parseFloat(portfolio.total_withdraw)||0:0;
+  const msg=portfolio?.admin_note||'';
+
+  // ── Update all dashboard cards & account tab
+  ['sumInv','accDep'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='$'+dep.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});});
+  ['sumProfit','accProfit'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='$'+pft.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});});
+  ['sumWithdraw','accWith'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='$'+totalWith.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});});
+
+  // ── Admin note banner
   const banner=document.getElementById('adminMsgBanner');
-  if(banner&&msg){banner.textContent=msg;banner.style.display='block';}
+  if(banner){banner.textContent=msg||'';banner.style.display=msg?'block':'none';}
+
+  // ── Transaction history (deposit_requests + withdrawal_requests)
   const {data:deps}=await sb.from('deposit_requests').select('*').eq('user_id',curUser.id).order('created_at',{ascending:false});
+  const {data:wds}=await sb.from('withdrawal_requests').select('*').eq('user_id',curUser.id).order('created_at',{ascending:false});
   const allTx=[
     ...(deps||[]).map(d=>({coin:d.wallet_type,amount:'$'+parseFloat(d.amount||0).toFixed(2),from:'Deposit',status:d.status,date:new Date(d.created_at).toLocaleDateString()})),
     ...(wds||[]).map(w=>({coin:w.coin,amount:'$'+parseFloat(w.amount||0).toFixed(2),from:'Withdrawal',status:w.status,date:new Date(w.created_at).toLocaleDateString()}))
   ];
+  allTx.sort((a,b)=>new Date(b.date)-new Date(a.date));
   const tbody=document.getElementById('txHistory');
   if(tbody){
-    if(!allTx.length){tbody.innerHTML='<tr><td colspan="5" class="tx-empty">No transactions found.</td></tr>';}
+    if(!allTx.length){tbody.innerHTML='<tr><td colspan="5" class="tx-empty">No transactions yet. Make your first deposit to get started.</td></tr>';}
     else{tbody.innerHTML=allTx.map(tx=>{
       const sc=tx.status==='approved'||tx.status==='completed'?'status-approved':tx.status==='pending'?'status-pending':'status-rejected';
       return `<tr><td style="font-weight:600;color:var(--blue2)">${tx.coin||'—'}</td><td>${tx.amount}</td><td>${tx.from}</td><td><span class="status-badge ${sc}">${tx.status}</span></td><td style="color:#94a3b8">${tx.date}</td></tr>`;
     }).join('');}
   }
+}
+
+// ── REAL-TIME: re-fetch dashboard whenever admin edits user_portfolios
+let realtimeSub=null;
+function subscribeRealtime(){
+  if(!curUser||realtimeSub)return;
+  realtimeSub=sb.channel('portfolio-changes')
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_portfolios',filter:`user_id=eq.${curUser.id}`},
+      ()=>loadHoldings()
+    )
+    .subscribe();
+}
+function unsubscribeRealtime(){
+  if(realtimeSub){sb.removeChannel(realtimeSub);realtimeSub=null;}
 }
 
 // ── DASH TABS
@@ -1044,27 +1074,3 @@ async function loadTicker(){
     try{
       const r=await fetch(`https://finnhub.io/api/v1/quote?symbol=${t.s}&token=${FINNHUB_KEY}`);
       const d=await r.json();
-      if(d&&d.c){
-        const chg=d.c-d.pc,pct=(chg/d.pc*100).toFixed(2);
-        const up=chg>=0;
-        return `<span class="ticker-item"><span class="sym">${t.l}</span> ${d.c.toLocaleString()} <span class="${up?'up':'dn'}">${up?'▲':'▼'}${Math.abs(pct)}%</span></span>`;
-      }
-    }catch(e){}
-    return '';
-  }));
-  const content=items.filter(Boolean).join('');
-  if(content)track.innerHTML=content+content;
-}
-
-// ── INIT
-window.addEventListener('load',async()=>{
-  const {data:{session}}=await sb.auth.getSession();
-  if(session?.user){curUser=session.user;updateNav(curUser);}
-  setTimeout(()=>showNextEarner(),3000);
-  setInterval(()=>showNextEarner(),8000);
-  loadTicker();
-  setInterval(loadTicker,60000);
-});
-</script>
-</body>
-</html>
