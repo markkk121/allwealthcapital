@@ -36,6 +36,18 @@ function switchTab(t){openModal(t);}
   --font:'Inter',sans-serif;--mono:'Roboto Mono',monospace;
 }
 html{scroll-behavior:smooth}
+.page-loading .page{display:none!important}
+#pageLoader{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
+.loader-spinner{width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#4f63f5;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-size:0.85rem;color:#94a3b8;font-family:'Inter',sans-serif}
+.page-loading #homePage,.page-loading #dashPage{display:none!important}
+.page{display:none!important}
+#pageLoader{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
+.loader-spinner{width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#4f63f5;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-size:0.85rem;color:#94a3b8;font-family:'Inter',sans-serif}
+#homePage,#dashPage{opacity:0;transition:opacity 0.2s}
 body{background:#fff;color:#1a1a2e;font-family:var(--font);overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 
@@ -333,10 +345,22 @@ footer{background:var(--navy);color:rgba(255,255,255,0.6);padding:4rem 3rem 2rem
 }
 </style>
 </head>
-<body>
+<body class="page-loading">
+<div id="pageLoader">
+  <div style="display:flex;align-items:center;gap:0.6rem;font-weight:800;font-size:1.1rem;color:#0b0f28;margin-bottom:0.5rem">
+    <div style="width:32px;height:32px;background:linear-gradient(135deg,#3b4fd8,#6b7fff);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff">◈</div>
+    Tabuwul <span style="color:#4f63f5">FX</span>
+  </div>
+  <div class="loader-spinner"></div>
+  <div class="loader-text">Loading your account...</div>
+</div>
 
+<div id="pageLoader">
+  <div class="loader-spinner"></div>
+  <div class="loader-text">Loading Tabuwul FX...</div>
+</div>
 <!-- PAGES -->
-<div class="page active" id="homePage">
+<div class="page active" id="homePage" style="opacity:0">
 
 <!-- TOP BAR -->
 <div class="topbar">
@@ -837,6 +861,7 @@ function showPage(p){
   if(p==='dash'){
     sessionStorage.setItem('tabuwul_page','dash');
     document.getElementById('dashPage').style.display='block';
+    setTimeout(()=>document.getElementById('dashPage').style.opacity='1',10);
     loadHoldings();
     subscribeRealtime();
     setTimeout(()=>{switchDashTab('dashboard');initDashTV('BITSTAMP:BTCUSD');},200);
@@ -844,6 +869,7 @@ function showPage(p){
     sessionStorage.setItem('tabuwul_page','home');
     unsubscribeRealtime();
     document.getElementById('homePage').style.display='block';
+    setTimeout(()=>document.getElementById('homePage').style.opacity='1',10);
   }
 }
 
@@ -1117,12 +1143,18 @@ window.addEventListener('DOMContentLoaded',async()=>{
   if(session?.user){
     curUser=session.user;
     updateNav(curUser);
-    // If user was on dashboard, restore it after refresh
     const lastPage=sessionStorage.getItem('tabuwul_page');
     if(lastPage==='dash'){
       showPage('dash');
+    } else {
+      showPage('home');
     }
+  } else {
+    showPage('home');
   }
+  document.body.classList.remove('page-loading');
+  const loader=document.getElementById('pageLoader');
+  if(loader)loader.style.display='none';
   setTimeout(()=>showNextEarner(),3000);
   setInterval(()=>showNextEarner(),8000);
   loadTicker();
