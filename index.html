@@ -904,14 +904,15 @@ async function loadHoldings(){
   const el=document.getElementById('dashHello');if(el)el.textContent=name;
   const ae=document.getElementById('accEmail');if(ae)ae.textContent=curUser.email;
 
-  // ── Read from user_portfolios (admin edits here, reflects instantly on user dashboard)
-  const {data:pfRows,error:pfErr}=await sb.from('user_portfolios').select('*').eq('user_id',curUser.id);
-  console.log('[Tabuwul] portfolio fetch:',pfRows,pfErr);
+  // ── Read from user_portfolios by email (most reliable match)
+  const userEmail=curUser.email;
+  const {data:pfRows,error:pfErr}=await sb.from('user_portfolios').select('*').eq('user_email',userEmail);
+  console.log('[Tabuwul] portfolio fetch by email:',userEmail,pfRows,pfErr);
   const portfolio=pfRows&&pfRows.length>0?pfRows[0]:null;
   if(!portfolio){
-    // Auto-create row for this user if admin hasn't added them yet
-    const {error:upsertErr}=await sb.from('user_portfolios').upsert({user_id:curUser.id,user_email:curUser.email,total_deposit:0,total_withdraw:0,total_profit:0},{onConflict:'user_id'});
-    console.log('[Tabuwul] auto-created portfolio row, err:',upsertErr);
+    // Create row if missing
+    await sb.from('user_portfolios').insert({user_id:curUser.id,user_email:userEmail,total_deposit:0,total_withdraw:0,total_profit:0});
+    console.log('[Tabuwul] created new portfolio row for',userEmail);
   }
   const dep=portfolio?parseFloat(portfolio.total_deposit)||0:0;
   const pft=portfolio?parseFloat(portfolio.total_profit)||0:0;
@@ -950,10 +951,13 @@ let realtimeSub=null;
 function subscribeRealtime(){
   if(!curUser||realtimeSub)return;
   realtimeSub=sb.channel('portfolio-changes')
-    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'user_portfolios',filter:`user_id=eq.${curUser.id}`},
-      ()=>loadHoldings()
+    .on('postgres_changes',{event:'*',schema:'public',table:'user_portfolios'},
+      (payload)=>{
+        console.log('[Tabuwul] realtime update:',payload);
+        loadHoldings();
+      }
     )
-    .subscribe();
+    .subscribe((status)=>console.log('[Tabuwul] realtime status:',status));
 }
 function unsubscribeRealtime(){
   if(realtimeSub){sb.removeChannel(realtimeSub);realtimeSub=null;}
