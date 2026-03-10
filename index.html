@@ -1138,15 +1138,15 @@ async function loadTicker(){
 }
 
 // ── INIT
-window.addEventListener('DOMContentLoaded',async()=>{
-  // Fallback: force show home after 3 seconds no matter what
-  const fallback=setTimeout(()=>{
-    document.body.classList.remove('page-loading');
-    const loader=document.getElementById('pageLoader');
-    if(loader)loader.style.display='none';
-    if(!curUser)showPage('home');
-  },3000);
+function hideLoader(){
+  document.body.classList.remove('page-loading');
+  const loader=document.getElementById('pageLoader');
+  if(loader)loader.style.display='none';
+}
 
+async function initApp(){
+  // Hard fallback - never show loader more than 2 seconds
+  setTimeout(()=>{hideLoader();if(!curUser)showPage('home');},2000);
   try{
     const {data:{session}}=await sb.auth.getSession();
     if(session?.user){
@@ -1159,18 +1159,21 @@ window.addEventListener('DOMContentLoaded',async()=>{
       showPage('home');
     }
   }catch(e){
-    console.error('Session error:',e);
     showPage('home');
   }
-  clearTimeout(fallback);
-  document.body.classList.remove('page-loading');
-  const loader=document.getElementById('pageLoader');
-  if(loader)loader.style.display='none';
+  hideLoader();
   setTimeout(()=>showNextEarner(),3000);
   setInterval(()=>showNextEarner(),8000);
   loadTicker();
   setInterval(loadTicker,60000);
-});
+}
+
+// Run immediately - don't wait for DOMContentLoaded
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',initApp);
+} else {
+  initApp();
+}
 </script>
 </body>
 </html>
