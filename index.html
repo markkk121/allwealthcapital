@@ -835,11 +835,13 @@ let curUser=null;
 function showPage(p){
   document.querySelectorAll('.page').forEach(x=>x.style.display='none');
   if(p==='dash'){
+    sessionStorage.setItem('tabuwul_page','dash');
     document.getElementById('dashPage').style.display='block';
     loadHoldings();
     subscribeRealtime();
     setTimeout(()=>{switchDashTab('dashboard');initDashTV('BITSTAMP:BTCUSD');},200);
   } else {
+    sessionStorage.setItem('tabuwul_page','home');
     unsubscribeRealtime();
     document.getElementById('homePage').style.display='block';
   }
@@ -901,7 +903,7 @@ async function doAuth(){
   }catch(e){err.textContent=e.message;err.style.display='block';}
   btn.textContent=tab==='login'?'Sign In':'Create Account';btn.disabled=false;
 }
-async function signOut(){unsubscribeRealtime();await sb.auth.signOut();curUser=null;updateNav(null);showPage('home');}
+async function signOut(){unsubscribeRealtime();sessionStorage.removeItem('tabuwul_page');await sb.auth.signOut();curUser=null;updateNav(null);showPage('home');}
 
 // ── PASSWORD GATE
 function openPwGate(){
@@ -1112,7 +1114,15 @@ async function loadTicker(){
 // ── INIT
 window.addEventListener('DOMContentLoaded',async()=>{
   const {data:{session}}=await sb.auth.getSession();
-  if(session?.user){curUser=session.user;updateNav(curUser);}
+  if(session?.user){
+    curUser=session.user;
+    updateNav(curUser);
+    // If user was on dashboard, restore it after refresh
+    const lastPage=sessionStorage.getItem('tabuwul_page');
+    if(lastPage==='dash'){
+      showPage('dash');
+    }
+  }
   setTimeout(()=>showNextEarner(),3000);
   setInterval(()=>showNextEarner(),8000);
   loadTicker();
