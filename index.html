@@ -7,6 +7,25 @@
 <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+<script>
+function openModal(t){
+  var m=document.getElementById('authModal');
+  if(!m)return;
+  m.className='modal-ov open';
+  var isSign=t==='signup';
+  document.getElementById('tabSignup').classList.toggle('active',isSign);
+  document.getElementById('tabLogin').classList.toggle('active',!isSign);
+  document.getElementById('nameGrp').style.display=isSign?'block':'none';
+  document.getElementById('mTitle').textContent=isSign?'Create Account':'Welcome Back';
+  document.getElementById('mSub').textContent=isSign?'Join 2,400+ traders today':'Sign in to your account';
+  document.getElementById('authBtn').textContent=isSign?'Create Account':'Sign In';
+  document.getElementById('authErr').style.display='none';
+}
+function closeModal(){
+  var m=document.getElementById('authModal');if(m)m.className='modal-ov';
+}
+function switchTab(t){openModal(t);}
+</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -1091,7 +1110,7 @@ async function loadTicker(){
 }
 
 // ── INIT
-window.addEventListener('load',async()=>{
+window.addEventListener('DOMContentLoaded',async()=>{
   const {data:{session}}=await sb.auth.getSession();
   if(session?.user){curUser=session.user;updateNav(curUser);}
   setTimeout(()=>showNextEarner(),3000);
